@@ -1,4 +1,4 @@
-#include "oiner.h"
+#include "grafo.h"
 int rolar_d20() {
     return (rand() % 20) + 1;
 }
