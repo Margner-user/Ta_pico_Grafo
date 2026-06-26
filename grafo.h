@@ -50,6 +50,10 @@ typedef struct {
     int ultimo_checkpoint;  //id do ultimo no com CHECKPOINT:1 visitado 
     int num_ciclos;        // quantas vezes o ciclo foi reiniciado 
 } Jogador;
+
+//Menu
+void Menu();
+
 //Carregar ficheiro e grafo
 void jogar(Grafo *g, Jogador *j);//Função principal
 No  *obter_no(Grafo *g, int id);// Vai buscar o nó dentro do nosso grafo
