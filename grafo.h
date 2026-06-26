@@ -66,4 +66,7 @@ int resolver_rolagem(No *no, Aresta *escolhida, int *penalizacao);// VAi ajudar 
 int rolar_ataque(int bonus_ataque, int defesa_alvo, int *dano_resultante);//Gera o dano que o jogador dá ou recebe,
 int combate(Jogador *j, Inimigo *inimigo);//Faz o loop até que o inimigo ou o jogador estiver morto
 void mostrar_status(Jogador *j);//Mostra a vida do jogador
-
+//
+int  guardar_jogo(const Jogador *j);//Para não se perder o progresso quando se sai do jogo
+int  carregar_jogo(Jogador *j);
+void apagar_save();
