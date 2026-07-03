@@ -12,15 +12,41 @@ void Menu() {
     printf("                 N A   F L O R E S T A\n");
     printf("===============================================================\n");
     printf("\n");
-    printf("                 1 - Resumir Hist�ria\n");
+    printf("                 1 - Resumir História\n");
     printf("                 2 - Novo Jogo\n");
-    printf("                 3 - Maior Pontua��o\n");
+    printf("                 3 - Maior Pontuação\n");
     printf("                 4 - Sair\n");
     printf("\n");
     printf("===============================================================\n");
     printf("Escolha uma opcao: ");
 }
-
+/* Garante que existe uma entrada para este id (cria se necessario) */
+No *garantir_no(Grafo *g, int id) {
+    No *no = obter_no(g, id);
+    if (no != NULL)
+        return no;
+    no= &g->nos[g->total_nos];
+    no->id= id;
+    no->texto[0] = '\0';
+    no->num_opcoes = 0;
+    no->existe = 1;
+    no->tem_inimigo = 0;
+    no->e_checkpoint= 0;
+    no->e_flashback = 0;
+    g->total_nos++;
+    return no;
+}//Novidade(03 de Julho)
+void ordenar_opcoes_desc(Aresta *arr, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j].peso < arr[j + 1].peso) {
+                Aresta tmp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = tmp;
+            }
+        }
+    }
+}//Novidade(03 de Julho)
 int rolar_d20() {
     return (rand() % 20) + 1;
 }
@@ -33,7 +59,7 @@ static void esperar_enter(void) {
 }
 static void remover_quebra_linha(char *linha) {
 /*O fgets estava a me dar erro, 
-pesquisei e parece que isso acontece quando não se remove o '\n' e '\r' do fim da linha */
+pesquisei e parece que isso acontece quando nÃ£o se remove o '\n' e '\r' do fim da linha */
     size_t len = strlen(linha);
     if (len > 0 && linha[len - 1] == '\n'){
       linha[len - 1] = '\0';
@@ -44,7 +70,7 @@ pesquisei e parece que isso acontece quando não se remove o '\n' e '\r' do fim 
 }
 
 //----------------Parser---------------------------
- //Btw ainda não existe mas garantir nó vai basicamente criar o nó
+ //Btw  garantir_no ainda nao existe mas vai basicamente criar o nÃ³
 int carregar_historia(const char *caminho, Grafo *g) {
     FILE *f = fopen(caminho, "r");
     if (f == NULL) {
@@ -63,7 +89,7 @@ int carregar_historia(const char *caminho, Grafo *g) {
 
         if (strncmp(linha, "ID:", 3) == 0) {
             no_atual = garantir_no(g, atoi(linha + 3));
-        //Btw ainda não existe mas "garantir nó" vai basicamente criar o nó
+        //Btw ainda nÃ£o existe mas "garantir nÃ³" vai basicamente criar o nÃ³
         }
         else if (strncmp(linha, "TEXTO:", 6) == 0) {
             if (no_atual != NULL) {
@@ -103,7 +129,7 @@ int carregar_historia(const char *caminho, Grafo *g) {
                 char campo[MAX_LINHA];
                 strncpy(campo, linha + 6, sizeof(campo) - 1);
                 campo[sizeof(campo) - 1] = '\0';
-                //Basicamente o tokenazer do java, vou separar o campo da opção porque tem peso, destino e etc...
+                //Basicamente o tokenazer do java, vou separar o campo da opÃ§Ã£o porque tem peso, destino e etc...
                 char *numero_str= strtok(campo, "|");
                 char *texto_str = strtok(NULL,  "|");
                 char *peso_str = strtok(NULL,  "|");
@@ -200,3 +226,138 @@ void mostrar_status(Jogador *j) {
         printf("   |   Ciclos: %d", j->num_ciclos);
     printf("\n----------------------------------------\n");
 }
+
+int resolver_rolagem(No *no, Aresta *escolhida, int *penalizacao) {
+    *penalizacao = 0;
+    int rolagem = rolar_d20();
+    printf("\n[Rolagem de dado: tiraste %d, dificuldade era %d]\n", rolagem, escolhida->peso);
+    if (rolagem >= escolhida->peso) {
+        printf(">> Sucesso! Segues o caminho que escolheste.\n");
+        return escolhida->destino;
+    }
+    Aresta validas[MAX_OPCOES];
+    int n_validas = 0;
+    for (int i = 0; i < no->num_opcoes; i++)
+        validas[n_validas++] = no->opcoes[i];
+    ordenar_opcoes_desc(validas, n_validas);
+    for (int i = 0; i < n_validas; i++) {
+        if (rolagem >= validas[i].peso) {
+            printf(">> Falhaste por %d pontos. O destino desvia-te para: \"%s\"\n",
+                   escolhida->peso - rolagem, validas[i].texto);
+            return validas[i].destino;
+        }
+    }
+    Aresta *pior = &validas[n_validas - 1];
+    *penalizacao = pior->peso - rolagem;
+    if (*penalizacao < 0) 
+        *penalizacao = 0; 
+    printf(">> Rolagem demasiado baixa! Nem o caminho mais facil estava ao teu alcance.\n");
+    if (pior->peso == 0)
+        printf(">> O confronto e inevitavel!\n");
+    else
+        printf(">> Oiner e forcado para: \"%s\" (-%d sanidade)\n", pior->texto, *penalizacao);
+    return pior->destino;
+}//Novidade(03 de Julho)
+
+
+void jogar(Grafo *g, Jogador *j) {
+    while (1) {
+        No *no = obter_no(g, j->no_atual);
+        if (no == NULL) {
+            printf("\n[ERRO] No %d nao encontrado. A terminar.\n", j->no_atual);
+            return;
+        }
+        if (no->e_checkpoint)
+            j->ultimo_checkpoint = no->id;
+        //Mostra o texto do no 
+        printf("\n========================================\n");
+        if (no->e_flashback) {
+            printf("       * * * FRAGMENTO DE MEMORIA * * *\n");
+            printf("========================================\n");
+            printf("%s\n", no->texto);
+            printf("========================================\n");
+            mostrar_status(j);
+            esperar_enter();
+        } else {
+            printf("%s\n", no->texto);
+            printf("========================================\n");
+            mostrar_status(j);
+        }
+        if (j->vida <= 0 || j->sanidade <= 0) {
+            if (j->sanidade <= 0)
+                printf("\nA mente de Oiner colapsa sob o peso da insanidade...\n");
+            else
+                printf("\nOiner sucumbe aos ferimentos...\n");
+            reiniciar_ciclo(j);
+            continue;
+        }
+        // fim da historia 
+        if (no->num_opcoes == 0) {
+            printf("\n[Fim da historia. Obrigado por jogar.]\n");
+            return;
+        }
+     
+        for (int i = 0; i < no->num_opcoes; i++) {
+            Aresta *a = &no->opcoes[i];
+            if (no->tem_inimigo && a->peso == 0)
+                printf("%d - %s [COMBATE]\n", a->numero, a->texto);
+            else
+                printf("%d - %s (dificuldade %d)\n", a->numero, a->texto, a->peso);
+        }
+        //le escolha do jogador 
+        int escolha = -1;
+        printf("\nEscolhe uma opcao: ");
+        int res = scanf("%d", &escolha);// Vai retornar 1 se for bem lido 0 se for mau lido, crt+z para sair do loop/jogo
+        if (res == EOF) {
+            printf("\n[EOF. A sair.]\n");
+            return;
+        }
+        if (res != 1) {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Entrada invalida.\n");
+            continue;
+        }
+        Aresta *escolhida = NULL;
+        for (int i = 0; i < no->num_opcoes; i++) {
+            if (no->opcoes[i].numero == escolha) {
+                escolhida = &no->opcoes[i];
+                break;
+            }
+        }
+        if (escolhida == NULL) {
+            printf("Opcao invalida, tenta novamente.\n");
+            continue;
+        }
+
+        // se o jogador escolheu atacar directamente (peso 0) 
+        if (no->tem_inimigo && escolhida->peso == 0) {
+            int venceu = combate(j, &no->inimigo);
+            if (!venceu) continue;
+            j->no_atual = escolhida->destino;
+            continue;
+        }
+        int penalizacao = 0;
+        int destino = resolver_rolagem(no, escolhida, &penalizacao);
+        if (penalizacao > 0) {
+            j->sanidade -= penalizacao;
+            if (j->sanidade < 0) j->sanidade = 0;
+        }
+        //verifica se o destino e uma opcao de combate (peso 0) 
+        int e_combate_forcado = 0;
+        if (no->tem_inimigo) {
+            for (int i = 0; i < no->num_opcoes; i++) {
+                if (no->opcoes[i].peso == 0 &&
+                    no->opcoes[i].destino == destino) {
+                    e_combate_forcado = 1;
+                    break;
+                }
+            }
+        }
+        if (e_combate_forcado) {
+            int venceu = combate(j, &no->inimigo);
+            if (!venceu) continue;
+        }
+        j->no_atual = destino;
+    }
+}////Novidade(03 de Julho)
