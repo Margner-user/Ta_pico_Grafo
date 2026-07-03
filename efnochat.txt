@@ -1,0 +1,755 @@
+# ============================================================
+# historia.txt - O Ciclo de Oiner
+# ============================================================
+# FORMATO:
+#   ID:<numero>
+#   TEXTO:<texto da cena>
+#   CHECKPOINT:1                     (opcional - grava ponto de respawn)
+#   INIMIGO:<nome>|<vida>|<bonus>|<defesa>  (opcional)
+#   OPCAO:<n>|<texto>|<peso>|<destino>
+#   FIM
+#
+# MECANICA DE ROLAGEM:
+#   O jogador escolhe uma opcao. O dado d20 e rolado:
+#   - rolagem >= peso_escolhido -> sucesso, vai para o destino.
+#   - rolagem < peso_escolhido  -> falha; jogo escolhe a melhor
+#     opcao cujo peso <= rolagem (da mais dificil para a mais facil).
+#   - rolagem tao baixa que nenhuma opcao encaixa -> vai para a
+#     pior opcao (menor peso) e perde sanidade = menor_peso - rolagem.
+#   - Opcoes com peso 0 sao de COMBATE, nunca entram na rolagem.
+#
+# CHECKPOINTS (ultimo visitado e o ponto de respawn ao morrer):
+#   ID 4   - inicio absoluto
+#   ID 9   - entrada na floresta (cruzamento)
+#   ID 61  - praca central da vila
+#   ID 122 - cabana final
+#   ID 140 - coracao da floresta
+#
+# ZONAS:
+#   IDs  0- 3  -> Prologo (cutscene, sem opcoes)
+#   IDs  4-20  -> Inicio / Vila / primeiros passos
+#   IDs 21-60  -> Floresta (Vendedor, arma, memorias M1-M3)
+#   IDs 61-99  -> Vila (taverna, forja, curandeiros, memorias M4-M6)
+#   IDs 101-116-> Casa da Avo (3 capitulos, memorias M7-M8)
+#   IDs 117-121-> Corredor final para a cabana
+#   IDs 122-139-> Cabana final + confronto em 3 fases + finais
+#   ID  140    -> Entrada do Coracao da Floresta (checkpoint)
+# ============================================================
+
+# ============================================================
+# PROLOGO (cutscene - nos sem opcoes, avancam automaticamente)
+# ============================================================
+
+ID:0
+TEXTO:Oiner sofre de esquizofrenia desde crianca. Ele imagina fantasmas e outros mundos, mas durante a infancia nao passa muito tempo nas alucinacoes.
+FIM
+
+ID:1
+TEXTO:Conforme cresce, os ataques pioram. Ele acaba internado, e a mae, o pai e a amiga de infancia visitam-no com frequencia.
+FIM
+
+ID:2
+TEXTO:Oiner comeca a trazer objetos estranhos do outro mundo, tentando provar que nao mente. As pessoas ao redor ficam cada vez mais preocupadas.
+FIM
+
+ID:3
+TEXTO:Durante um novo ataque, Oiner desperta novamente no mesmo lugar: o inicio de uma floresta sombria, junto ao extremo de uma vila medieval.
+FIM
+
+# ============================================================
+# INICIO DO GRAFO JOGAVEL
+# NO_INICIAL = 4 (primeiro checkpoint absoluto)
+# ============================================================
+
+ID:4
+CHECKPOINT:1
+ITEM:ARMA|Lamina Enferrujada|2
+TEXTO:Um senhor desconhecido aparece diante de Oiner. Ele diz que o liquido magico que o fazia dormir por muito tempo acabou. Oiner, confuso, pede explicacoes. O senhor apenas lhe ordena que avance ate o outro extremo da floresta assombrada.
+OPCAO:1|Perguntar quem e o senhor|8|5
+OPCAO:2|Questionar sobre o liquido magico|10|6
+OPCAO:3|Ignorar o senhor e seguir sozinho pela floresta|12|9
+FIM
+
+ID:5
+TEXTO:O senhor olha fixamente para Oiner e sorri de forma estranha. Ele diz que nao passa de um guia, o protetor da vila, alguem que observa tudo nas sombras. O nome dele, diz, e Doc.
+OPCAO:1|Pressionar Doc para revelar mais|12|8
+OPCAO:2|Aceitar a explicacao e seguir em frente|8|20
+FIM
+
+ID:6
+TEXTO:Doc fala com voz grave. Diz que Oiner precisa de chegar ate a cabana no coracao da floresta. So la podera descobrir a verdade sobre o ciclo em que esta preso. Algo na forma como ele diz "verdade" parece demasiado pessoal para um estranho.
+OPCAO:1|Perguntar o que encontrara na cabana|14|10
+OPCAO:2|Seguir imediatamente para a floresta|9|9
+FIM
+
+ID:7
+TEXTO:Oiner tenta prosseguir sozinho, mas a floresta e densa e sufocante. Incapaz de avancar sem orientacao, decide ir ate a vila em busca de mais informacoes.
+OPCAO:1|Explorar as ruas silenciosas da vila|8|11
+OPCAO:2|Procurar uma cabana abandonada nas margens|10|12
+FIM
+
+ID:8
+TEXTO:Doc para de sorrir. "Ja te disse demasiado," murmura, e vira as costas, desaparecendo entre as sombras como se nunca tivesse estado ali. Oiner fica sozinho com mais perguntas do que respostas.
+OPCAO:1|Seguir para a floresta de qualquer forma|10|20
+OPCAO:2|Ir ate a vila antes de entrar na floresta|8|7
+FIM
+
+# ============================================================
+# ID 9 - CRUZAMENTO DA FLORESTA (checkpoint)
+# ============================================================
+
+ID:9
+CHECKPOINT:1
+TEXTO:Oiner enche-se de coragem e comeca a desbravar a floresta. Esta desarmado e com frio. Chega a um cruzamento: a frente ve uma luz fraca entre as arvores, a esquerda ouve agua a correr, e a direita nao se ouve nem se ve nada - um silencio que parece propositado.
+OPCAO:1|Seguir a luz em frente|12|13
+OPCAO:2|Virar a direita, para o silencio|10|14
+OPCAO:3|Virar a esquerda, seguindo a agua|9|15
+OPCAO:4|Voltar a vila|6|7
+FIM
+
+ID:10
+TEXTO:Doc acena lentamente. "Na cabana encontraras o que procuras - felicidade ou tristeza, tal como todos que vieram antes de ti." Ao despedir-se, o seu olhar demora-se no rosto de Oiner com algo que parece culpa.
+OPCAO:1|Seguir para a floresta|1|9
+FIM
+
+# ============================================================
+# IDs 11-12 - PRIMEIROS CONTACTOS NA VILA
+# ============================================================
+
+ID:11
+TEXTO:Oiner anda cuidadosamente pela vila. Sente os olhares dos habitantes nas suas costas. Ate que encontra uma velhinha que o olha com olhos que parecem reconhece-lo. "Tu estas aqui outra vez... parece que te vejo com mais frequencia."
+OPCAO:1|Falar com a velhinha|8|16
+OPCAO:2|Ignorar e continuar pela vila|10|17
+FIM
+
+ID:12
+TEXTO:Oiner caminha em piloto automatico e entra numa casa abandonada nas margens da vila. La dentro encontra uma velhinha sentada junto a uma vela, observando-o entrar em silencio, como se o esperasse.
+OPCAO:1|Falar com a velhinha|9|16
+OPCAO:2|Explorar a casa sozinho|11|18
+FIM
+
+# ============================================================
+# IDs 13-20 - CAMINHOS DA FLORESTA (zona inicial)
+# ============================================================
+
+ID:13
+TEXTO:Oiner segue em frente, em direcao a luz fraca. A medida que se aproxima, percebe que nao e luz nenhuma - e o reflexo de olhos amarelos a observa-lo entre as arvores. Uma silhueta encapuzada surge ao lado dos olhos, imovel.
+OPCAO:1|Avancar com cautela em direcao a silhueta|13|21
+OPCAO:2|Recuar e tentar outro caminho|9|15
+FIM
+
+ID:14
+TEXTO:Oiner vira a direita, entrando num silencio absoluto e perturbador. De repente, um animal disforme - parte lobo, parte algo que nao deveria existir - salta das sombras, rosnando.
+INIMIGO:Criatura Disforme|18|3|2
+OPCAO:1|Enfrentar a criatura|0|19
+OPCAO:2|Tentar fugir de volta ao cruzamento|14|9
+FIM
+
+ID:15
+TEXTO:Oiner vira a esquerda, seguindo o som de agua a correr. Encontra um riacho estreito que atravessa a floresta. Do outro lado, avista uma trilha que parece levar mais fundo na mata.
+OPCAO:1|Atravessar o riacho|10|35
+OPCAO:2|Seguir a margem sem atravessar|8|16
+FIM
+
+ID:16
+TEXTO:A velhinha encara Oiner com olhos que parecem ver mais do que deveriam. "Ja perdeste a conta de quantas vezes vieste aqui, nao foi?" Por um instante, um flash de memoria atravessa a mente de Oiner - o rosto do seu pai, sorrindo, segurando um frasco de liquido azulado.
+OPCAO:1|Perguntar a velhinha sobre o pai|11|101
+OPCAO:2|Afastar-se, perturbado pela memoria|9|61
+FIM
+
+ID:17
+TEXTO:Oiner continua, a mente ainda perturbada pelas memorias fragmentadas. A vila parece cada vez mais familiar, como se ele ja tivesse vivido ali antes - numa vida que nao consegue recordar por completo.
+OPCAO:1|Entrar na vila|1|61
+FIM
+
+ID:18
+TEXTO:Oiner explora a casa abandonada sozinho. Sobre uma mesa coberta de po, encontra um diario com a caligrafia que, de alguma forma, lhe parece familiar. As paginas falam de um liquido capaz de "abrir a mente para outros planos" - e de um teste que nunca deveria ter sido feito num filho.
+OPCAO:1|Levar o diario e continuar para a vila|1|61
+FIM
+
+ID:19
+TEXTO:Com o ultimo golpe, a criatura desfaz-se em sombras e desaparece no ar, como se nunca tivesse existido de verdade. Oiner respira fundo, o coracao ainda acelerado, e continua o seu caminho.
+OPCAO:1|Continuar pela floresta|1|16
+FIM
+
+ID:20
+TEXTO:Doc observa Oiner partir em silencio. Antes de desaparecer entre as sombras, diz apenas: "Nao demores muito. O liquido que te prende aqui nao dura para sempre." A frase nao faz sentido - ainda.
+OPCAO:1|Entrar na floresta|1|9
+FIM
+
+# ============================================================
+# IDs 21-60 - ZONA DA FLORESTA
+# Vendedor das Sombras + arma + memorias M1, M2, M3
+# ============================================================
+
+ID:21
+TEXTO:A silhueta encapuzada nao se move. Quando Oiner se aproxima o suficiente, uma voz rouca e seca corta o silencio: "Poucos chegam tao perto sem fugir primeiro." O encapuzado baixa o capuz, revelando um rosto cinzento, quase translucido, com olhos que brilham como brasas frias.
+OPCAO:1|Perguntar quem ele e|9|22
+OPCAO:2|Recuar lentamente|10|13
+FIM
+
+ID:22
+TEXTO:"Chamam-me o Vendedor das Sombras. Nao pertenco a vila, nem totalmente a esta floresta." Ele observa Oiner de cima a baixo. "Vejo que andas desarmado. Isso vai matar-te antes de chegares a qualquer lado que valha a pena chegar."
+OPCAO:1|Perguntar se ele pode ajudar|8|23
+OPCAO:2|Ignorar e seguir em frente|11|24
+FIM
+
+ID:23
+TEXTO:O Vendedor sorri, um gesto que nao chega aos olhos. "Tenho algo que podia servir-te bem. Uma lamina que ja cortou mais do que carne." Ele faz uma pausa calculada. "Mas nada e de graca. Perdi algo nesta floresta, ha muito tempo. Traz-mo de volta, e a lamina e tua."
+OPCAO:1|Perguntar o que ele perdeu|9|25
+OPCAO:2|Recusar o acordo e seguir sozinho|13|24
+FIM
+
+ID:24
+TEXTO:Oiner decide nao confiar no estranho e continua sozinho, desarmado, mais fundo na floresta. O Vendedor observa-o partir sem dizer mais nada, o seu olhar pesado nas costas de Oiner.
+OPCAO:1|Seguir para o riacho|9|15
+OPCAO:2|Seguir para a clareira escura|10|26
+FIM
+
+ID:25
+TEXTO:"Um relicario de prata. Pequeno, com a forma de uma lua minguante. Perdi-o numa gruta a norte daqui, ha mais invernos do que me lembro de contar." Os olhos do Vendedor brilham mais forte por um instante. "Encontra-o, e tens a tua lamina."
+OPCAO:1|Aceitar a missao e ir para a gruta|8|27
+OPCAO:2|Recusar e seguir sozinho|12|24
+FIM
+
+ID:26
+TEXTO:Oiner chega a uma clareira onde a luz da lua parece mais fria do que deveria. No centro, uma arvore morta ergue-se sozinha, os galhos retorcidos como dedos. Um corvo negro de tamanho impossivel pousa no galho mais alto e fixa-o com olhos vermelhos.
+INIMIGO:Corvo das Cinzas|14|4|1
+OPCAO:1|Atacar o corvo antes que ele ataque|0|28
+OPCAO:2|Afastar-se devagar|10|15
+FIM
+
+ID:27
+TEXTO:Oiner segue as indicacoes do Vendedor, subindo um terreno rochoso ate encontrar a entrada de uma gruta escura, meio escondida por raizes grossas. O ar la dentro cheira a terra molhada e a algo mais antigo, como tempo parado.
+OPCAO:1|Entrar na gruta|11|29
+OPCAO:2|Recuar - o lugar parece errado|9|24
+FIM
+
+ID:28
+TEXTO:O Corvo das Cinzas cai, e a arvore morta racha ao meio com um som seco, como se algo dentro dela finalmente se libertasse. Entre as fendas do tronco, Oiner avista um pequeno objeto metalico a brilhar.
+OPCAO:1|Investigar o objeto na arvore|1|30
+FIM
+
+ID:29
+TEXTO:[MEMORIA M1] A escuridao da gruta engole Oiner por um instante - e quando os olhos se ajustam, ele ja nao esta na gruta. Esta numa sala iluminada, mais novo, sentado ao colo do pai, que lhe mostra um frasco de liquido azulado a brilhar suavemente. "Isto vai abrir-te os olhos, filho. Vais ver coisas que ninguem mais consegue ver." A voz do pai e calorosa, orgulhosa - nao ha aviso nenhum nela.
+OPCAO:1|Continuar a explorar a gruta, perturbado|1|31
+FIM
+
+ID:30
+TEXTO:O objeto e um pequeno frasco vazio, com um simbolo entalhado que Oiner nao reconhece - mas que lhe parece, de alguma forma, profundamente familiar. Como se ja o tivesse visto antes, num outro tempo.
+OPCAO:1|Guardar o frasco e continuar|1|15
+FIM
+
+ID:31
+TEXTO:Mais fundo na gruta, sob uma pedra solta, Oiner encontra o relicario de prata em forma de lua minguante, exatamente como o Vendedor descreveu. Ao toca-lo, sente um frio estranho subir-lhe pelo braco - e por um segundo ve o rosto do seu pai, sorrindo.
+OPCAO:1|Pegar no relicario e voltar ao Vendedor|1|32
+FIM
+
+ID:32
+TEXTO:Oiner regressa a clareira onde deixou o Vendedor das Sombras, que ainda la esta, imovel como se nunca se tivesse mexido. "Encontraste-o." Nao e uma pergunta.
+OPCAO:1|Entregar o relicario|1|33
+FIM
+
+ID:33
+ITEM:ARMA|Lamina de Cinzas|5
+TEXTO:O Vendedor segura o relicario com um cuidado quase reverente, e por um instante os seus olhos parecem menos frios. "Ha muito que ninguem me devolvia nada nesta floresta." Ele estende a Oiner uma lamina escura, leve como se nao pesasse nada, mas que parece beber a pouca luz a volta. "A Lamina de Cinzas. Usa-a bem."
+OPCAO:1|Aceitar a lamina e agradecer|1|34
+FIM
+
+ID:34
+TEXTO:Com a Lamina de Cinzas agora na mao, Oiner sente-se, pela primeira vez desde que acordou nesta floresta, um pouco menos indefeso. O Vendedor das Sombras observa-o partir, e antes de desaparecer entre as sombras, murmura algo que soa como "boa sorte, filho de William."
+OPCAO:1|Seguir em frente, perturbado pelo que ouviu|1|15
+FIM
+
+ID:35
+TEXTO:Oiner atravessa o riacho com cuidado, a agua gelada a passar-lhe pelos tornozelos. Do outro lado, a trilha continua entre arvores cada vez mais altas e antigas, como se esta parte da floresta fosse mais velha do que o resto.
+OPCAO:1|Seguir a trilha|1|36
+FIM
+
+ID:36
+TEXTO:A trilha leva a um pequeno cemiterio esquecido, lapides inclinadas e cobertas de musgo. Um dos nomes gravados faz Oiner parar: e dificil de ler, mas as primeiras letras parecem formar "William". Uma sombra move-se entre as lapides.
+INIMIGO:Sombra Errante|16|3|3
+OPCAO:1|Investigar a lapide, ignorando o perigo|0|46
+OPCAO:2|Afastar-se rapidamente|11|37
+FIM
+
+ID:37
+TEXTO:Oiner afasta-se do cemiterio, o nome na lapide ainda a martelar-lhe na cabeca, sem saber bem porque lhe parece tao importante. A trilha continua para uma zona mais densa da floresta.
+OPCAO:1|Continuar pela trilha densa|1|38
+FIM
+
+ID:38
+TEXTO:[MEMORIA M2] Uma tontura subita obriga Oiner a apoiar-se numa arvore. Quando reabre os olhos, ve-se mais novo, a brincar num jardim com uma menina da sua idade - a amiga de infancia. Ao fundo, um homem alto observa-os, sorridente, mas com algo de cansado no rosto. "Ele trabalha demais," diz uma voz de mulher, suave, que deve ser a mae. "Diz que e por nossa causa." O homem ao fundo levanta a mao e acena. O gesto parece um adeus.
+OPCAO:1|Sacudir a cabeca e continuar|1|39
+FIM
+
+ID:39
+TEXTO:Mais a frente, a floresta abre-se numa pequena ravina. Uma ponte de madeira podre, mal segura por cordas gastas, e a unica forma de atravessar pela rota principal.
+OPCAO:1|Atravessar a ponte com cuidado|13|40
+OPCAO:2|Descer pela ravina e procurar outro caminho|11|41
+FIM
+
+ID:40
+ITEM:POCAO_VIDA|Ervas Secas do Acampamento|20
+TEXTO:A ponte range a cada passo, mas aguenta. Do outro lado, Oiner encontra um pequeno acampamento abandonado - uma fogueira ha muito apagada, e os restos de quem por ali passou antes dele. Uma manta dobrada. Um prato. Uma vida interrompida.
+OPCAO:1|Procurar no acampamento|1|42
+FIM
+
+ID:41
+TEXTO:Descer pela ravina e mais lento, mas mais seguro. No fundo, Oiner encontra agua parada e o esqueleto de um animal grande - algo que parece nem pertencer a este mundo. Os ossos sao grandes de mais, e as garras ainda estao presas na lama.
+INIMIGO:Predador da Ravina|20|4|3
+OPCAO:1|Atacar antes que o predador desperte|0|43
+OPCAO:2|Tentar passar em silencio|12|42
+FIM
+
+ID:42
+TEXTO:Oiner consegue chegar ao outro lado da ravina e reencontra a trilha principal, mais perto agora de uma zona da floresta onde as arvores comecam a rarear e uma luz diferente comeca a filtrar-se entre os troncos.
+OPCAO:1|Continuar em direcao a clareira mais a frente|1|44
+FIM
+
+ID:43
+TEXTO:Com o predador derrotado, Oiner respira fundo e sobe de volta a trilha principal, o coracao ainda acelerado pela luta. A floresta parece um pouco menos hostil depois de ter sobrevivido a isso.
+OPCAO:1|Continuar em direcao a clareira mais a frente|1|44
+FIM
+
+ID:44
+TEXTO:[MEMORIA M3] A clareira a frente esta banhada de uma luz estranha, e por um momento o mundo parece dobrar-se sobre si mesmo. Oiner ve o pai, sozinho num laboratorio improvisado, a escrever furiosamente num caderno. "Os resultados sao inconsistentes," murmura o pai para si mesmo, "mas o potencial... o potencial e maior do que qualquer coisa que ja vi." Ha um frasco vazio ao lado do caderno - identico ao que Oiner encontrou na arvore morta. Identico ao que o pai lhe deu em crianca.
+OPCAO:1|Sair da clareira, abalado|1|45
+FIM
+
+ID:45
+TEXTO:Oiner sai da clareira ainda a tremer com o que viu. As memorias estao a tornar-se mais nitidas, mais frequentes - como se a propria floresta estivesse a ajuda-lo a lembrar o que ele passou a vida inteira a esquecer. A trilha continua em direcao a vila.
+OPCAO:1|Seguir em direcao a vila|9|61
+OPCAO:2|Voltar ao cruzamento principal da floresta|8|9
+FIM
+
+ID:46
+TEXTO:Apos a Sombra Errante se dissipar, Oiner inclina-se sobre a lapide gasta. Limpa o musgo com a manga e consegue, finalmente, ler o nome completo: "William - marido, pai, e homem que perseguiu o conhecimento alem do que era sabio." A data de morte e recente. Ha apenas alguns anos.
+OPCAO:1|Afastar-se, com mais perguntas do que respostas|1|37
+FIM
+
+# ============================================================
+# IDs 61-99 - ZONA DA VILA
+# Praca central (hub), taverna, forja, curandeiros, ruas
+# ============================================================
+
+ID:61
+CHECKPOINT:1
+TEXTO:Oiner entra na praca central da vila. Pedras desgastadas pelo tempo, casas de madeira inclinadas, e um silencio estranho pairam sobre tudo - como se a vila inteira estivesse a espera de algo. Tres caminhos se abrem: o cheiro de fumo e cerveja vem de uma taverna a esquerda; o som de metal batendo ecoa de uma forja a direita; e mais a frente, ervas penduradas marcam a casa dos curandeiros.
+OPCAO:1|Ir a taverna|8|62
+OPCAO:2|Ir a forja do ferreiro|8|68
+OPCAO:3|Ir a casa dos curandeiros|8|72
+OPCAO:4|Explorar as ruas da vila|9|80
+OPCAO:5|Visitar a velhinha|7|107
+OPCAO:6|Sair da vila, de volta a floresta|7|87
+FIM
+
+# ---------- TAVERNA (62-67) ----------
+
+ID:62
+TEXTO:A taverna esta mal iluminada, cheia de sombras e de vozes baixas que se calam quando Oiner entra. Um homem corpulento atras do balcao olha-o com desconfianca, mas nao o expulsa.
+OPCAO:1|Sentar-se e ouvir as conversas|7|63
+OPCAO:2|Perguntar ao taberneiro sobre a vila|9|64
+FIM
+
+ID:63
+TEXTO:Oiner senta-se num canto escuro e ouve. Dois homens falam baixo sobre "o rapaz que volta sempre" e sobre "o curandeiro que ja nao aceita mais pagamentos dele". Outro grupo fala de luzes estranhas vistas perto do coracao da floresta ha noites atras.
+OPCAO:1|Perguntar diretamente sobre as luzes na floresta|10|65
+OPCAO:2|Sair da taverna, incomodado|8|61
+FIM
+
+ID:64
+TEXTO:O taberneiro limpa um copo lentamente. "Esta vila existe ha mais tempo do que qualquer um aqui consegue contar. Coisas estranhas acontecem perto da floresta - sempre aconteceram. Mas tu... tu pareces ser parte disso, rapaz."
+OPCAO:1|Perguntar o que ele quer dizer com isso|11|66
+OPCAO:2|Mudar de assunto|8|63
+FIM
+
+ID:65
+TEXTO:Um dos homens, ja bebado, encara Oiner com olhos vidrados. "As luzes? Vem da cabana velha, no coracao da mata. Dizem que quem entra la nunca mais sai o mesmo." Ele ri, um som sem alegria nenhuma, e volta-se para a bebida.
+OPCAO:1|Agradecer e sair|1|67
+FIM
+
+ID:66
+TEXTO:[MEMORIA M4] O taberneiro afasta-se sem responder, mas o silencio traz uma onda subita de memoria: Oiner, ainda crianca, sentado a mesa de jantar, o pai a discutir baixinho com a mae sobre "limites" e "etica", enquanto Oiner finge dormir no colo da amiga de infancia. "Ele vai continuar de qualquer maneira," diz o pai. "Sabes que vai." A mae chora em silencio. Ninguem nota que Oiner esta acordado.
+OPCAO:1|Sair da taverna, perturbado|1|67
+FIM
+
+ID:67
+TEXTO:Oiner sai da taverna, a cabeca cheia de fragmentos que nao consegue juntar por completo. A praca central continua la fora, tao silenciosa quanto antes.
+OPCAO:1|Voltar a praca central|1|61
+FIM
+
+# ---------- FORJA (68-71) ----------
+
+ID:68
+TEXTO:A forja crepita com calor intenso. Um ferreiro de bracos largos martela uma lamina em brasa, sem levantar os olhos quando Oiner se aproxima. "Mais um visitante," diz ele, sem parar de trabalhar. "Raramente trazem nada que valha o meu tempo."
+OPCAO:1|Mostrar a Lamina de Cinzas|9|69
+OPCAO:2|Perguntar se ele vende armas|8|71
+FIM
+
+ID:69
+TEXTO:O ferreiro para, finalmente, e examina a Lamina de Cinzas com um misto de espanto e desconfianca. "Esta lamina nao e deste mundo... ou melhor, e mais deste mundo do que a maioria das coisas aqui." Ele oferece afia-la, tornando-a mais eficaz em combate.
+OPCAO:1|Deixar o ferreiro afiar a lamina|9|70
+OPCAO:2|Recusar e guardar a lamina|7|71
+FIM
+
+ID:70
+ITEM:POCAO_SANIDADE|Cha de Ervas da Forja|25
+TEXTO:O ferreiro trabalha a lamina com cuidado obsessivo, e quando a devolve, ela parece mais leve, mais afiada, quase a vibrar de energia contida. "Agora sim. Usa-a com responsabilidade, rapaz. Essa lamina tem memoria propria."
+OPCAO:1|Agradecer e sair|1|71
+FIM
+
+ID:71
+TEXTO:O ferreiro limpa as maos num pano enegrecido. "Se precisares de reparar algo, a minha porta esta sempre aberta." Ele aponta com a cabeca para a saida, ja voltando ao trabalho.
+OPCAO:1|Voltar a praca central|1|61
+FIM
+
+# ---------- CURANDEIROS (72-79) ----------
+
+ID:72
+TEXTO:A casa dos curandeiros cheira a ervas secas e fumo doce. Uma mulher de meia idade, vestida de panos simples, observa Oiner entrar com uma expressao que mistura pena e cautela.
+OPCAO:1|Pedir ajuda - sente-se exausto|7|73
+OPCAO:2|Perguntar sobre a vila e a floresta|9|75
+FIM
+
+ID:73
+ITEM:POCAO_VIDA|Cha Medicinal da Curandeira|30
+TEXTO:A curandeira prepara um cha de cheiro forte e entrega-o a Oiner. "Isto vai ajudar a acalmar a tua mente. Nao cura tudo, mas alivia." Ao beber, Oiner sente um alivio momentaneo, como se uma pressao lhe saisse da cabeca.
+OPCAO:1|Agradecer e descansar um pouco|1|74
+FIM
+
+ID:74
+TEXTO:Apos o cha, Oiner sente-se mais centrado, a mente um pouco mais clara do que estava. A curandeira observa-o com atencao. "Tu nao es daqui, pois nao? Nao no sentido que pensas."
+OPCAO:1|Perguntar o que ela quer dizer|10|76
+OPCAO:2|Agradecer e sair, sem responder|7|79
+FIM
+
+ID:75
+TEXTO:"Esta floresta protege e pune, em igual medida," diz a curandeira, escolhendo as palavras com cuidado. "Ja vi outros como tu. Confusos. A procurar algo que nao sabem nomear." Ela nao parece surpreendida com a presenca de Oiner.
+OPCAO:1|Perguntar se ela conhece o seu pai|11|77
+OPCAO:2|Pedir um cha para acalmar a mente|7|73
+FIM
+
+ID:76
+TEXTO:[MEMORIA M5] A curandeira toca de leve no braco de Oiner, e a sala desaparece por um instante. Ele ve-se deitado numa cama de hospital, mais velho, tubos e maquinas a sua volta, a mae a chorar baixinho junto a porta, sem coragem de entrar. "Ele nao e perigoso," ouve a mae dizer a alguem fora. "Ele esta so... assustado." A imagem desfaz-se, deixando Oiner com o gosto de lagrimas que nao sao dele.
+OPCAO:1|Voltar a si, com o coracao apertado|1|79
+FIM
+
+ID:77
+TEXTO:A curandeira hesita, os olhos a desviarem-se por um instante. "Conheci muitos homens desta vila. Alguns mais do que devia." A resposta e evasiva de proposito, e ambos sabem disso.
+OPCAO:1|Insistir, pedindo a verdade|13|78
+OPCAO:2|Deixar estar e agradecer|8|79
+FIM
+
+ID:78
+TEXTO:"Nao sou eu quem deve contar-te essa historia," diz a curandeira, com firmeza pela primeira vez. "Ha quem a guarde ha mais tempo, e com mais direito do que eu." Ela nao diz mais nada, mas o olhar dela aponta, sem querer, para a direcao da casa da velhinha.
+OPCAO:1|Agradecer e sair, pensativo|1|79
+FIM
+
+ID:79
+TEXTO:Oiner sai da casa dos curandeiros, a mente um pouco mais leve mas o coracao mais pesado. Sente que cada pessoa nesta vila sabe mais do que esta disposta a dizer.
+OPCAO:1|Voltar a praca central|1|61
+FIM
+
+# ---------- RUAS DA VILA / MEMORIA M6 (80-87) ----------
+
+ID:80
+TEXTO:Oiner perde-se pelas ruas estreitas e tortas da vila, passando por janelas fechadas e portas que parecem nunca se abrir. Ao virar uma esquina, encontra uma pequena capela em ruinas, esquecida ha anos.
+OPCAO:1|Entrar na capela em ruinas|10|81
+OPCAO:2|Continuar a explorar as ruas|8|84
+FIM
+
+ID:81
+TEXTO:O interior da capela esta tomado por po e teias de aranha, mas um banco no centro parece ter sido usado recentemente. Sobre ele, alguem deixou um pequeno boneco de pano, gasto pelo tempo.
+OPCAO:1|Pegar no boneco de pano|1|82
+FIM
+
+ID:82
+TEXTO:[MEMORIA M6] Ao tocar no boneco gasto, Oiner reconhece-o instantaneamente - era seu, de crianca. A memoria explode: ele e a amiga de infancia, sentados no chao de um quarto, o boneco entre os dois. "Promete que nunca vais esquecer-te de mim," diz ela, a rir. Ele promete. A imagem desfaz-se devagar, dolorosamente. O boneco ainda esta quente, como se alguem o tivesse deixado ha pouco.
+OPCAO:1|Guardar o boneco e sair da capela, em silencio|1|83
+FIM
+
+ID:83
+TEXTO:Oiner sai da capela com o boneco apertado na mao, mais memorias do que consegue processar de uma so vez. A vila continua a sua volta, indiferente.
+OPCAO:1|Voltar a praca central|1|61
+FIM
+
+ID:84
+TEXTO:Mais a frente, Oiner encontra um grupo de criancas a brincar num beco, cantando uma rima antiga e estranha sobre "o rapaz que dorme na floresta e acorda sempre a chorar".
+OPCAO:1|Aproximar-se das criancas|8|85
+OPCAO:2|Afastar-se, perturbado pela rima|7|61
+FIM
+
+ID:85
+TEXTO:As criancas calam-se de repente ao verem Oiner de perto, olhando-o com uma mistura de curiosidade e medo. Uma delas, mais corajosa, pergunta: "Es mesmo real desta vez?"
+OPCAO:1|Perguntar o que ela quer dizer|10|86
+OPCAO:2|Afastar-se sem responder|7|61
+FIM
+
+ID:86
+TEXTO:A crianca encolhe os ombros, ja perdendo o interesse. "A minha avo diz que ha um rapaz que aparece e desaparece. Disse que um dia ele vai ficar de vez." As outras criancas puxam-na para continuar a brincar, e a conversa morre ali.
+OPCAO:1|Afastar-se, pensativo|1|61
+FIM
+
+ID:87
+TEXTO:Oiner sente que ja explorou o suficiente da vila por agora. As ruas e os rostos comecam a repetir-se, e algo dentro dele diz que e hora de seguir em frente - para a floresta, ou para mais perto da verdade.
+OPCAO:1|Voltar ao cruzamento principal da floresta|9|9
+OPCAO:2|Seguir diretamente para o coracao da floresta|11|140
+FIM
+
+# ============================================================
+# IDs 101-116 - CASA DA AVO (3 capitulos)
+# ============================================================
+
+# --- CAPITULO 1: dica do loop, sem confirmar nada ---
+
+ID:101
+TEXTO:A velhinha guia Oiner ate a sua pequena casa, perto do limite da vila. La dentro, o ar e quente e cheira a cha de ervas. "Senta-te," diz ela, num tom que nao admite recusa. "Ha quanto tempo dizes que estas aqui, rapaz?"
+OPCAO:1|Dizer que nao sabe ao certo|9|102
+OPCAO:2|Perguntar quem ela e|8|103
+FIM
+
+ID:102
+TEXTO:A velhinha acena lentamente, como se ja esperasse essa resposta. "Pois. Ninguem sabe, ao certo. O tempo aqui... dobra-se sobre si mesmo, para quem como tu vem e volta, vem e volta." Ela serve dois chas, sem perguntar se ele quer.
+OPCAO:1|Perguntar o que ela quer dizer com "vem e volta"|1|104
+FIM
+
+ID:103
+TEXTO:"Sou so uma velha que vive ha demasiado tempo nesta vila," diz ela, com um sorriso que nao revela nada. "Mas conheco esta floresta melhor do que a maioria gostaria de admitir."
+OPCAO:1|Perguntar o que ela sabe sobre a floresta|1|104
+FIM
+
+ID:104
+TEXTO:A velhinha aproxima-se, a voz quase um sussurro. "Ja estiveste aqui antes, Oiner. Mais vezes do que imaginas. Cada vez que adormeces no outro lado, acordas aqui de novo - no mesmo lugar, junto a floresta." Ela faz uma pausa. "Um ciclo. E os ciclos, meu rapaz, tem sempre uma razao de existir."
+OPCAO:1|Perguntar porque ela sabe isso|11|105
+OPCAO:2|Perguntar como quebrar o ciclo|12|106
+FIM
+
+ID:105
+TEXTO:"Porque ja vi outros presos em ciclos parecidos," responde ela, evasiva, os olhos a desviarem-se para a janela. "E porque esta vila lembra-se de tudo, mesmo quando as pessoas prefeririam esquecer." Ela nao diz mais nada sobre o assunto.
+OPCAO:1|Agradecer e sair, com mais perguntas do que antes|1|61
+FIM
+
+ID:106
+TEXTO:A velhinha hesita, as maos a tremerem ligeiramente a volta da chavena. "Isso, rapaz, ainda nao te posso dizer. Mas continua a explorar. A floresta guarda mais do que perigos - guarda tambem respostas. Volta a falar comigo quando tiveres visto mais."
+OPCAO:1|Agradecer e sair, pensativo|1|61
+FIM
+
+# --- CAPITULO 2: o pai em crianca, evasiva mas humana ---
+
+ID:107
+TEXTO:A velhinha abre a porta antes mesmo de Oiner bater. "Voltaste." Nao parece surpreendida. Convida-o a entrar, e desta vez os seus olhos parecem mais cansados, como se carregassem um peso antigo que vai ficando mais pesado a cada visita.
+OPCAO:1|Perguntar sobre o pai, quando ele era crianca|9|108
+OPCAO:2|Perguntar diretamente se ela e familia dele|11|109
+FIM
+
+ID:108
+TEXTO:Um sorriso triste cruza o rosto da velhinha. "O William era um rapaz brilhante. Lia tudo o que conseguia encontrar, fazia perguntas que ninguem sabia responder." Ela serve cha, as maos um pouco mais firmes desta vez. "Sempre quis entender o que havia para alem do que se ve."
+OPCAO:1|Perguntar o que aconteceu com ele|1|110
+FIM
+
+ID:109
+TEXTO:A velhinha para, a chavena a meio caminho dos labios. Por um longo momento, nao diz nada. "Sim," responde finalmente, a voz quebrando ligeiramente. "Sou mae dele. William era o meu filho."
+OPCAO:1|Perguntar porque ela nunca disse isso antes|1|110
+FIM
+
+ID:110
+TEXTO:"Porque dizer-te isso e dizer-te tudo, e nao sei se estas pronto para tudo." Os olhos dela brilham, marejados. "O teu pai amava-te mais do que a propria vida, Oiner. Mas a ambicia dele... a ambicia dele era maior do que o amor, no fim. Isso e algo que nunca lhe perdoei."
+OPCAO:1|Perguntar sobre o liquido magico|12|111
+OPCAO:2|Nao perguntar mais, deixa-la em paz|7|61
+FIM
+
+ID:111
+TEXTO:A velhinha fecha os olhos por um instante. "Ha coisas que uma mae nao consegue dizer ao neto, por mais que o neto mereca a verdade." Ela poe a mao sobre a de Oiner, fria e tremula. "Mas a verdade vai encontrar-te, rapaz. Esta cada vez mais perto. Sinto-o."
+OPCAO:1|Agradecer e sair, com o coracao pesado|8|61
+OPCAO:2|Insistir mais uma vez, com calma|10|112
+FIM
+
+# --- CAPITULO 3: ela quebra e revela que sabia ---
+
+ID:112
+TEXTO:Desta vez, quando Oiner entra, encontra a velhinha sentada junto a janela, a olhar para a floresta ao longe. Ha algo diferente nela hoje - uma quietude pesada, como quem finalmente decidiu parar de fugir de algo.
+OPCAO:1|Sentar-se ao lado dela em silencio|7|113
+OPCAO:2|Perguntar diretamente sobre o liquido|13|114
+FIM
+
+ID:113
+TEXTO:Oiner senta-se, e por um longo momento nenhum dos dois fala. E a velhinha, finalmente, que quebra o silencio. "Sabia. Desde o inicio, sabia o que ele estava a fazer contigo." A confissao sai dela como um peso que ja nao consegue carregar.
+OPCAO:1|Perguntar porque ela nunca o impediu|1|115
+FIM
+
+ID:114
+TEXTO:A velhinha vira-se para Oiner, e desta vez nao desvia o olhar. "Sabia. Desde o inicio, sabia o que ele estava a fazer contigo." As palavras saem pesadas, como pedras que carregou durante anos.
+OPCAO:1|Perguntar porque ela nunca o impediu|1|115
+FIM
+
+ID:115
+TEXTO:"Tentei," diz ela, a voz a falhar. "Tentei impedi-lo mil vezes. Mas o William estava convencido de que estava a dar-te um dom, nao uma maldicao. E quando finalmente percebeu o erro... ja era tarde demais para ele." Uma lagrima escorre, que ela nem tenta esconder. "Ele morreu a tentar encontrar forma de te libertar, Oiner. Isso tens de saber."
+OPCAO:1|Perguntar o que ela quer dizer com isso|1|116
+FIM
+
+ID:116
+TEXTO:[MEMORIA M7] A velhinha segura as maos de Oiner, e uma onda de memoria atravessa-o com mais forca do que qualquer uma anterior: William, mais velho, mais cansado, sozinho numa noite chuvosa, a escrever uma ultima carta. "Se isto funcionar," murmura ele para si mesmo, a mao a tremer, "talvez consiga dar-te de volta o que te tirei." A cena muda. [MEMORIA M8] William na cabana, a falar com algo que Oiner nao consegue ver claramente. "Aceito o preco," diz ele, a voz firme apesar do medo. "Qualquer preco, para o salvar."
+OPCAO:1|Sair da casa da avo, abalado ate ao fundo|1|61
+FIM
+
+# ============================================================
+# IDs 117-121 - CORREDOR FINAL PARA A CABANA
+# ============================================================
+
+ID:117
+TEXTO:O caminho estreita-se entre raizes grossas como pernas de gigantes adormecidos. O silencio aqui e diferente do resto da floresta - nao e vazio, e expectante, como se a propria mata soubesse o que esta prestes a acontecer.
+INIMIGO:Guardiao das Raizes|22|4|3
+OPCAO:1|Enfrentar o que bloqueia o caminho|0|118
+OPCAO:2|Tentar desviar-se pela mata densa|14|119
+FIM
+
+ID:118
+TEXTO:Com o Guardiao das Raizes vencido, o caminho a frente abre-se, como se a propria floresta tivesse decidido deixa-lo passar. Oiner sente o peso do que vem a seguir - uma certeza que nunca tinha tido antes.
+OPCAO:1|Continuar em frente|1|120
+FIM
+
+ID:119
+TEXTO:Desviar-se pela mata e mais lento e arriscado, mas Oiner consegue contornar o perigo. Sai exausto do outro lado, mas inteiro. Algumas batalhas valem mais a pena quando se evitam.
+OPCAO:1|Continuar em frente|1|120
+FIM
+
+ID:120
+TEXTO:A mata comeca finalmente a abrir-se. Entre os ultimos troncos, Oiner avista uma luz amarela, quente, vinda de uma janela. A cabana. Depois de tudo, depois de tantos ciclos, ela esta finalmente ali, a sua frente.
+OPCAO:1|Aproximar-se da cabana|1|121
+FIM
+
+ID:121
+TEXTO:Quanto mais perto Oiner chega, mais memorias parecem querer emergir de uma vez - vozes, rostos, fragmentos de uma vida que comeca finalmente a fazer sentido como um todo. A porta da cabana esta entreaberta, como se o esperasse ha muito tempo.
+OPCAO:1|Parar e respirar fundo antes de entrar|7|122
+OPCAO:2|Entrar imediatamente, sem hesitar|10|122
+FIM
+
+# ============================================================
+# IDs 122-139 - CABANA FINAL + CONFRONTO EM 3 FASES + FINAIS
+# ============================================================
+
+ID:122
+CHECKPOINT:1
+TEXTO:Oiner empurra a porta da cabana. La dentro, junto a uma lareira acesa, esta o senhor desconhecido - Doc - exatamente onde Oiner sempre soube, de alguma forma, que ele estaria. "Chegaste," diz Doc, com um sorriso que ja nao parece tao estranho quanto antes. "Finalmente."
+OPCAO:1|Perguntar quem ele realmente e|9|123
+OPCAO:2|Avancar, pronto para o confronto|11|125
+FIM
+
+ID:123
+TEXTO:Doc inclina a cabeca, quase com pena. "Ja deves desconfiar, no fundo. Sempre soubeste, so nao querias admitir." A luz da lareira distorce o seu rosto por um instante, mostrando algo - alguem - por baixo da mascara. Um rosto que Oiner conhece.
+OPCAO:1|Insistir - quem es tu?|1|124
+FIM
+
+ID:124
+TEXTO:"Sou a parte de mim que nunca te deixou," diz Doc, a voz a mudar, a tornar-se mais familiar, mais dolorosamente humana. "Sou o teu pai, Oiner. Ou o que sobrou dele, depois de tudo o que fiz."
+OPCAO:1|Confrontar o que resta de William|1|125
+FIM
+
+ID:125
+TEXTO:O ar na cabana fica pesado, carregado de anos de silencio e culpa. Doc - William - levanta-se devagar. "Tens duas escolhas, filho. Podes voltar a dormir, tomar o que resta do liquido, e deixar este ciclo continuar para sempre. Ou podes lutar contra mim - contra tudo o que te fiz - e talvez, finalmente, acabar com isto."
+OPCAO:1|Voltar a dormir e tomar o liquido|5|136
+OPCAO:2|Lutar contra ele|0|126
+FIM
+
+# --- FASE 1: Doc, a Mascara ---
+
+ID:126
+TEXTO:Oiner ergue a Lamina de Cinzas - ou, se a nao tiver, apenas os punhos cerrados - e avanca. Doc sorri, um sorriso que comeca a rachar como vidro fino. "Entao seja. Vamos ver se aguentas a verdade."
+INIMIGO:Doc, a Mascara|24|5|3
+OPCAO:1|Atacar|0|127
+FIM
+
+ID:127
+TEXTO:A mascara de Doc estilhaca-se completamente, e por um instante ha apenas um vazio onde ele estava. Depois, a forma comeca a reconstruir-se - mais jovem, mais cheia de fogo e ambicao nos olhos. E William, mas um William de ha muitos anos, antes de qualquer arrependimento.
+OPCAO:1|Observar a transformacao, em guarda|1|128
+FIM
+
+# --- FASE 2: William jovem, a Ambicao ---
+
+ID:128
+TEXTO:"Vais ver coisas que ninguem mais consegue ver," diz o William jovem, repetindo palavras de tantos anos atras, mas agora com um brilho febril nos olhos. "Eu dei-te um dom, e tu queres destrui-lo?" Ele ergue as maos, energia instavel a crepitar a sua volta.
+INIMIGO:William, a Ambicao|28|5|4
+OPCAO:1|Atacar|0|129
+FIM
+
+ID:129
+TEXTO:O William jovem cai de joelhos, a energia a dissipar-se. Mas em vez de desaparecer, ele comeca a envelhecer diante de Oiner - as rugas a aparecerem, os ombros a curvarem-se, o brilho febril a dar lugar a algo muito mais triste: arrependimento genuino.
+OPCAO:1|Baixar a lamina, hesitante|1|130
+FIM
+
+# --- FASE 3: William real, o Arrependimento ---
+
+ID:130
+TEXTO:O William real - velho, cansado, humano - ergue os olhos para Oiner. Nao ha luta nele agora, so dor. "Nao vim para lutar contigo de verdade, filho. Vim para que finalmente pudesses vencer-me. Precisava que fosses tu a derrotar o que te fiz."
+OPCAO:1|Perguntar porque fez tudo isto|9|131
+OPCAO:2|Avancar para o golpe final|11|133
+FIM
+
+ID:131
+TEXTO:"Ambicao," diz William, a voz quebrada. "Queria entender o que havia para alem deste mundo, e a minha pesquisa precisava de um sujeito que reagisse como tu reagias. Disse a mim mesmo que era por nos, pela familia, pelo conhecimento. Mentira atras de mentira, ate ja nao conseguir distinguir a verdade."
+OPCAO:1|Perguntar sobre a sua morte|1|132
+FIM
+
+ID:132
+TEXTO:"Morri a tentar reverter o que te fiz. E mesmo depois de morrer, nao consegui descansar - a minha alma estava destinada a reencarnar, mas recusei. Vendi essa segunda vida, esse recomeco, por uma ultima chance de te salvar deste ciclo que eu proprio criei." Uma lagrima cai pelo rosto envelhecido de William. "Tens de ser tu a terminar isto, Oiner. So tu podes."
+OPCAO:1|Avancar para o golpe final|1|133
+FIM
+
+ID:133
+TEXTO:William nao se defende. Fecha os olhos, e espera. "Estou pronto," diz ele, num sussurro. "Ha muito que deveria ter feito isto."
+INIMIGO:William, o Arrependimento|15|2|1
+OPCAO:1|Desferir o golpe final|0|134
+OPCAO:2|Hesitar e baixar a arma|9|135
+FIM
+
+# ============================================================
+# FINAIS
+# ============================================================
+
+# --- FINAL A: Ciclo continua ---
+
+ID:136
+TEXTO:Oiner olha para Doc, exausto demais para lutar, ou talvez ainda nao pronto para a verdade. "Voltar a dormir," murmura. Doc acena, quase com tristeza, e estende um frasco do liquido azulado. "Outra vez, entao. Ate a proxima."
+OPCAO:1|Beber o liquido|1|137
+FIM
+
+ID:137
+TEXTO:O mundo dissolve-se a volta de Oiner como tinta na agua. A ultima coisa que ve e o rosto de Doc, observando-o partir com uma expressao impossivel de ler. Quando a escuridao finalmente o engole, uma certeza fica: ele vai acordar de novo, no mesmo lugar, junto a floresta. O ciclo continua.
+OPCAO:1|Acordar de novo no inicio da floresta|1|4
+FIM
+
+# --- FINAL B1: Golpe final ---
+
+ID:134
+TEXTO:O golpe final atinge William, e ele desfaz-se nao em sombras, nao em magia, mas em luz quente e dourada - como se, finalmente, depois de anos preso entre a vida e a morte, ele pudesse descansar. As ultimas palavras dele ficam suspensas no ar: "Obrigado, filho. Agora... vive."
+OPCAO:1|Observar a luz desaparecer|1|138
+FIM
+
+# --- FINAL B2: Perdao sem golpe ---
+
+ID:135
+TEXTO:Oiner baixa a lamina, incapaz de desferir o golpe final. William abre os olhos, surpreendido. "Porque hesitas? Mereco isto." A voz de Oiner, quando finalmente fala, esta cheia de uma dor que se acumulou durante anos. "Porque ja perdi-te uma vez. Nao preciso de te perder outra vez para seres livre." William fecha os olhos. Uma lagrima. E depois, luz.
+OPCAO:1|Deixar William partir em paz|1|138
+FIM
+
+# --- EPILOGO ---
+
+ID:138
+TEXTO:A cabana dissolve-se a sua volta, e pela primeira vez em anos - talvez na sua vida inteira - Oiner sente o peso a sair-lhe dos ombros. Nao ha mais floresta. Nao ha mais vila. So uma luz suave, calma, e o silencio de algo finalmente resolvido.
+OPCAO:1|Deixar-se levar pela luz|1|139
+FIM
+
+ID:139
+TEXTO:[MONOLOGO FINAL] "Passei a vida inteira a pensar que estava preso entre dois mundos - um real, outro imaginado. A verdade e mais simples e mais dificil do que isso: eu estava preso entre quem o meu pai queria que eu fosse, e quem eu escolhi ser, no fim. Ele tentou consertar o que partiu, da unica forma que lhe restava - e talvez isso seja, no fundo, o que o amor de um pai imperfeito sempre acaba por ser: tentar, falhar, e tentar mais uma vez, ate ja nao haver mais tempo. Eu nao vou esquecer a dor que ele me causou. Mas tambem nao vou esquecer que, no final, ele escolheu-me a mim. Acordo agora, nao na floresta, nao na vila - mas em mim mesmo. E pela primeira vez, isso e suficiente."
+FIM
+
+# ============================================================
+# ID 140 - ENTRADA DO CORACAO DA FLORESTA (checkpoint)
+# ============================================================
+
+ID:140
+CHECKPOINT:1
+TEXTO:A floresta muda a sua volta. As arvores ficam mais altas, mais antigas, e a luz que as atravessa parece vir de lugar nenhum. Oiner sente que cada passo o leva mais fundo nao so na mata, mas em algo que sempre esteve dentro de si. Nao ha caminho de volta daqui - so em frente.
+OPCAO:1|Continuar em frente|1|117
+FIM
