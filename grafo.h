@@ -60,6 +60,7 @@ No  *obter_no(Grafo *g, int id);// Vai buscar o nó dentro do nosso grafo
 No  *garantir_no(Grafo *g, int id);//Garante que o nó existe se não existir vai criar
 int  carregar_historia(const char *caminho, Grafo *g);// Função de parsing, vai decodificar o que esta no ficheiro da historia para nós
 //
+void ordenar_opcoes_desc(Aresta *arr, int n);
 int rolar_d20(void);//Função do rolo do dado
 int resolver_rolagem(No *no, Aresta *escolhida, int *penalizacao);// VAi ajudar na movimentação por causa dos pesos
 //
