@@ -1,7 +1,7 @@
 # ============================================================
 # historia.txt - O Ciclo de Oiner
 # ============================================================
-# FORMATO:
+# FORMATO: 
 #   ID:<numero>
 #   TEXTO:<texto da cena>
 #   CHECKPOINT:1                     (opcional - grava ponto de respawn)
