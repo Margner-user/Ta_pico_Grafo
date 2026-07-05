@@ -280,6 +280,7 @@ void reiniciar_ciclo(Jogador *j){
 }
 
 void jogar(Grafo *g, Jogador *j) {
+	srand((unsigned int)time(NULL));   // seed da aleatoriedade, uma vez por partida
     while (1) {
         No *no = obter_no(g, j->no_atual);
         if (no == NULL) {

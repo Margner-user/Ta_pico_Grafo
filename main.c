@@ -6,7 +6,6 @@
 
 int main() {
 	setlocale(LC_ALL, "PORTUGUESE");
-
     Grafo g;
     g.total_nos = 0;
     int opcao;
