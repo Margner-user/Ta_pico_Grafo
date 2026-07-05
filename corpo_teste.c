@@ -12,14 +12,25 @@ void Menu() {
     printf("                 N A   F L O R E S T A\n");
     printf("===============================================================\n");
     printf("\n");
-    printf("                 1 - Resumir HistÃ³ria\n");
+    printf("                 1 - Resumir História\n");
     printf("                 2 - Novo Jogo\n");
-    printf("                 3 - Maior PontuaÃ§Ã£o\n");
+    printf("                 3 - Maior Pontuação\n");
     printf("                 4 - Sair\n");
     printf("\n");
     printf("===============================================================\n");
     printf("Escolha uma opcao: ");
 }
+
+No *obter_no(Grafo *g, int id) {
+	int i;
+    for (i = 0; i < g->total_nos; i++) {
+        if (g->nos[i].id == id) {
+            return &g->nos[i];
+        }
+    }
+    return NULL;
+}
+
 /* Garante que existe uma entrada para este id (cria se necessario) */
 No *garantir_no(Grafo *g, int id) {
     No *no = obter_no(g, id);
@@ -37,8 +48,9 @@ No *garantir_no(Grafo *g, int id) {
     return no;
 }//Novidade(03 de Julho)
 void ordenar_opcoes_desc(Aresta *arr, int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
+	int i, j;
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
             if (arr[j].peso < arr[j + 1].peso) {
                 Aresta tmp = arr[j];
                 arr[j] = arr[j + 1];
@@ -237,10 +249,11 @@ int resolver_rolagem(No *no, Aresta *escolhida, int *penalizacao) {
     }
     Aresta validas[MAX_OPCOES];
     int n_validas = 0;
-    for (int i = 0; i < no->num_opcoes; i++)
+    int i;
+    for (i = 0; i < no->num_opcoes; i++)
         validas[n_validas++] = no->opcoes[i];
     ordenar_opcoes_desc(validas, n_validas);
-    for (int i = 0; i < n_validas; i++) {
+    for (i = 0; i < n_validas; i++) {
         if (rolagem >= validas[i].peso) {
             printf(">> Falhaste por %d pontos. O destino desvia-te para: \"%s\"\n",
                    escolhida->peso - rolagem, validas[i].texto);
@@ -259,6 +272,12 @@ int resolver_rolagem(No *no, Aresta *escolhida, int *penalizacao) {
     return pior->destino;
 }//Novidade(03 de Julho)
 
+void reiniciar_ciclo(Jogador *j){
+    j->vida = 100;
+    j->sanidade = 100;
+    j->no_atual = j->ultimo_checkpoint;
+    j->num_ciclos++;
+}
 
 void jogar(Grafo *g, Jogador *j) {
     while (1) {
@@ -296,8 +315,8 @@ void jogar(Grafo *g, Jogador *j) {
             printf("\n[Fim da historia. Obrigado por jogar.]\n");
             return;
         }
-     
-        for (int i = 0; i < no->num_opcoes; i++) {
+     	int i;
+        for (i = 0; i < no->num_opcoes; i++) {
             Aresta *a = &no->opcoes[i];
             if (no->tem_inimigo && a->peso == 0)
                 printf("%d - %s [COMBATE]\n", a->numero, a->texto);
@@ -319,7 +338,8 @@ void jogar(Grafo *g, Jogador *j) {
             continue;
         }
         Aresta *escolhida = NULL;
-        for (int i = 0; i < no->num_opcoes; i++) {
+        
+        for (i = 0; i < no->num_opcoes; i++) {
             if (no->opcoes[i].numero == escolha) {
                 escolhida = &no->opcoes[i];
                 break;
@@ -345,8 +365,9 @@ void jogar(Grafo *g, Jogador *j) {
         }
         //verifica se o destino e uma opcao de combate (peso 0) 
         int e_combate_forcado = 0;
+        
         if (no->tem_inimigo) {
-            for (int i = 0; i < no->num_opcoes; i++) {
+            for (i = 0; i < no->num_opcoes; i++) {
                 if (no->opcoes[i].peso == 0 &&
                     no->opcoes[i].destino == destino) {
                     e_combate_forcado = 1;

@@ -56,6 +56,7 @@ void Menu();
 
 //Carregar ficheiro e grafo
 void jogar(Grafo *g, Jogador *j);//Função principal
+void reiniciar_ciclo(Jogador *j);
 No  *obter_no(Grafo *g, int id);// Vai buscar o nó dentro do nosso grafo
 No  *garantir_no(Grafo *g, int id);//Garante que o nó existe se não existir vai criar
 int  carregar_historia(const char *caminho, Grafo *g);// Função de parsing, vai decodificar o que esta no ficheiro da historia para nós
