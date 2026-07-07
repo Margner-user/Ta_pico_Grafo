@@ -12,9 +12,9 @@ void Menu() {
     printf("                 N A   F L O R E S T A\n");
     printf("===============================================================\n");
     printf("\n");
-    printf("                 1 - Resumir Histï¿½ria\n");
+    printf("                 1 - Resumir Historia\n");
     printf("                 2 - Novo Jogo\n");
-    printf("                 3 - Maior Pontuaï¿½ï¿½o\n");
+    printf("                 3 - Maior Pontuacao\n");
     printf("                 4 - Sair\n");
     printf("\n");
     printf("===============================================================\n");
@@ -249,7 +249,9 @@ int combate(Jogador *j, Inimigo *inimigo){
         } else {
             printf("Oiner ataca, mas falha o golpe.\n");
         }
+		 esperar_enter();
         if (vida_inimigo <= 0) break;
+		
         /* turno do inimigo */
         if (rolar_ataque(inimigo->bonus_ataque, JOGADOR_DEFESA, &dano)) {
             j->vida -= dano;
@@ -259,7 +261,7 @@ int combate(Jogador *j, Inimigo *inimigo){
         } else {
             printf("%s ataca, mas erra o golpe.\n", inimigo->nome);
         }
-
+		 esperar_enter();
         turno++;
     }
     if (j->vida <= 0) {
