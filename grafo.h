@@ -105,6 +105,10 @@ void mostrar_status(Jogador *j);//Mostra a vida do jogador
 int  guardar_jogo(const Jogador *j);//Para não se perder o progresso quando se sai do jogo
 int  carregar_jogo(Jogador *j);
 void apagar_save();
+//complementares
+void sleep_ms(int ms);
+void limpaBuffer();
+
 
 // Inventario (mochila) - so acessivel fora de combate
 void adicionar_pocao(Jogador *j, const char *nome, TipoItem tipo, int valor);// guarda uma pocao apanhada na mochila

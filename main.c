@@ -16,10 +16,14 @@ int main() {
         do {
             if (scanf("%d", &opcao) != 1) {
                 printf(" Entrada invalida! Digite apenas numeros.\n");
-                int c;
-                while ((c = getchar()) != '\n' && c != EOF) {} /* limpa o buffer */
+                limpaBuffer();
                 opcao = -1; 
             }
+            else if(opcao < 1 || opcao > 4){
+            	printf("Entrada inválida! Digite um número entre 1 e 4.\n");
+            	limpaBuffer();
+                opcao = -1; 
+			}
         } while (opcao < 1 || opcao > 4);
 
         switch (opcao) {
@@ -33,7 +37,7 @@ int main() {
             	printf("\nA retomar o jogo...\n");
             	printf("No: %d | Vida: %d | Sanidade: %d | Ciclos: %d\n",jogador.no_atual, jogador.vida, jogador.sanidade, jogador.num_ciclos);
 
-            	jogar(&grafo, &jogador);
+            	jogar(&g, &jogador);
 				apagar_save();
                 break;
 			}

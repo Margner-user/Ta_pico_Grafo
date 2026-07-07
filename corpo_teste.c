@@ -21,6 +21,19 @@ void Menu() {
     printf("Escolha uma opcao: ");
 }
 
+void sleep_ms(int ms) {
+    clock_t inicio = clock();
+
+    while ((clock() - inicio) * 1000 / CLOCKS_PER_SEC < ms) {
+        // espera até completar o tempo
+    }
+}
+
+void limpaBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+
 No *obter_no(Grafo *g, int id) {
 	int i;
     for (i = 0; i < g->total_nos; i++) {
@@ -519,14 +532,16 @@ void jogar(Grafo *g, Jogador *j) {
             printf("========================================\n");
             printf("%s\n", no->texto);
             printf("========================================\n");
-            esperar_enter();
+            sleep_ms(3300);
+			//esperar_enter();
             mostrar_status(j);
         } else {
             printf("%s\n", no->texto);
             printf("========================================\n");
             mostrar_status(j);
                 if (no->e_checkpoint || no->tem_inimigo) {
-        			esperar_enter();
+        			sleep_ms(3300);
+					//esperar_enter();
     			} 
         }
         if (j->vida <= 0 || j->sanidade <= 0) {
@@ -534,6 +549,7 @@ void jogar(Grafo *g, Jogador *j) {
                 printf("\nA mente de Oiner colapsa sob o peso da insanidade...\n");
             else
                 printf("\nOiner sucumbe aos ferimentos...\n");
+            sleep_ms(3000);
             reiniciar_ciclo(j);
             continue;
         }
@@ -557,12 +573,14 @@ void jogar(Grafo *g, Jogador *j) {
         int res = scanf("%d", &escolha);// Vai retornar 1 se for bem lido 0 se for mau lido, crt+z para sair do loop/jogo
         if (res == EOF) {
             printf("\n[EOF. A sair.]\n");
+            sleep_ms(2000);
             return;
         }
         if (res != 1) {
             int c;
             while ((c = getchar()) != '\n' && c != EOF) {}
             printf("Entrada invalida.\n");
+            sleep_ms(2000);
             continue;
         }
         if (escolha == 0) {
@@ -579,6 +597,7 @@ void jogar(Grafo *g, Jogador *j) {
         }
         if (escolhida == NULL) {
             printf("Opcao invalida, tenta novamente.\n");
+            sleep_ms(1500);
             continue;
         }
 
@@ -586,7 +605,8 @@ void jogar(Grafo *g, Jogador *j) {
         if (no->tem_inimigo && escolhida->peso == 0) {
             int venceu = combate(j, &no->inimigo);
             if (!venceu) continue;
-            esperar_enter();
+            sleep_ms(2500);
+            //esperar_enter();
             j->no_atual = escolhida->destino;
             continue;
         }
@@ -596,7 +616,8 @@ void jogar(Grafo *g, Jogador *j) {
             j->sanidade -= penalizacao;
             if (j->sanidade < 0) j->sanidade = 0;
         }
-        esperar_enter();
+        sleep_ms(3000);
+        //esperar_enter();
         //verifica se o destino e uma opcao de combate (peso 0) 
         int e_combate_forcado = 0;
         
