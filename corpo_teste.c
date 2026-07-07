@@ -12,9 +12,9 @@ void Menu() {
     printf("                 N A   F L O R E S T A\n");
     printf("===============================================================\n");
     printf("\n");
-    printf("                 1 - Resumir Hist�ria\n");
+    printf("                 1 - Resumir História\n");
     printf("                 2 - Novo Jogo\n");
-    printf("                 3 - Maior Pontua��o\n");
+    printf("                 3 - Maior Pontuação\n");
     printf("                 4 - Sair\n");
     printf("\n");
     printf("===============================================================\n");
@@ -71,7 +71,7 @@ static void esperar_enter(void) {
 }
 static void remover_quebra_linha(char *linha) {
 /*O fgets estava a me dar erro, 
-pesquisei e parece que isso acontece quando nÃ£o se remove o '\n' e '\r' do fim da linha */
+pesquisei e parece que isso acontece quando nÃƒÂ£o se remove o '\n' e '\r' do fim da linha */
     size_t len = strlen(linha);
     if (len > 0 && linha[len - 1] == '\n'){
       linha[len - 1] = '\0';
@@ -82,7 +82,7 @@ pesquisei e parece que isso acontece quando nÃ£o se remove o '\n' e '\r' do fi
 }
 
 //----------------Parser---------------------------
- //Btw  garantir_no ainda nao existe mas vai basicamente criar o nÃ³
+ //Btw  garantir_no ainda nao existe mas vai basicamente criar o nÃƒÂ³
 int carregar_historia(const char *caminho, Grafo *g) {
     FILE *f = fopen(caminho, "r");
     if (f == NULL) {
@@ -101,7 +101,7 @@ int carregar_historia(const char *caminho, Grafo *g) {
 
         if (strncmp(linha, "ID:", 3) == 0) {
             no_atual = garantir_no(g, atoi(linha + 3));
-        //Btw ainda nÃ£o existe mas "garantir nÃ³" vai basicamente criar o nÃ³
+        //Btw ainda nÃƒÂ£o existe mas "garantir nÃƒÂ³" vai basicamente criar o nÃƒÂ³
         }
         else if (strncmp(linha, "TEXTO:", 6) == 0) {
             if (no_atual != NULL) {
@@ -141,7 +141,7 @@ int carregar_historia(const char *caminho, Grafo *g) {
                 char campo[MAX_LINHA];
                 strncpy(campo, linha + 6, sizeof(campo) - 1);
                 campo[sizeof(campo) - 1] = '\0';
-                //Basicamente o tokenazer do java, vou separar o campo da opÃ§Ã£o porque tem peso, destino e etc...
+                //Basicamente o tokenazer do java, vou separar o campo da opÃƒÂ§ÃƒÂ£o porque tem peso, destino e etc...
                 char *numero_str= strtok(campo, "|");
                 char *texto_str = strtok(NULL,  "|");
                 char *peso_str = strtok(NULL,  "|");
@@ -383,3 +383,38 @@ void jogar(Grafo *g, Jogador *j) {
         j->no_atual = destino;
     }
 }////Novidade(03 de Julho)
+
+// Salvar Progresso
+//
+#define FICHEIRO_SAVE "save.bin"
+#define SAVE_SIGNATURE "SAVE"   
+int guardar_jogo(const Jogador *j) {
+    FILE *f = fopen(FICHEIRO_SAVE, "wb");
+    if (!f) return 0;
+    fwrite(SAVE_SIGNATURE, sizeof(char), strlen(SAVE_SIGNATURE), f); // escreve "SAVE", para localizar o ficheiro correcto
+    fwrite(j, sizeof(Jogador), 1, f);                                // escreve jogador
+    fclose(f);
+    printf("Jogo guardado!\n");
+    return 1;
+}
+int carregar_jogo(Jogador *j) {
+    FILE *f = fopen(FICHEIRO_SAVE, "rb");
+    if (!f) return 0;
+    char assinatura[5] = {0}; // espaço para "SAVE" + '\0'
+    fread(assinatura, sizeof(char), strlen(SAVE_SIGNATURE), f);
+    if (strcmp(assinatura, SAVE_SIGNATURE) != 0) {
+        printf("Save inválido ou corrompido.\n");
+        fclose(f);
+        return 0;
+    }
+    fread(j, sizeof(Jogador), 1, f);
+    fclose(f);
+    printf("Jogo carregado!\n");
+    return 1;
+}
+void apagar_save(void) {
+    remove(FICHEIRO_SAVE);
+    printf("Save apagado.\n");
+}
+
+
