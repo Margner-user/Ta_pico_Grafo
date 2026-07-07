@@ -10,8 +10,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
- 
- 
+//Update recordes
+#define RECORDE_H
+#define FICHEIRO_RECORDE "recordes.bin"
+#define RECORDE_INFINITO 999999
+//Struct tabela de recordes
+typedef struct {
+    char nome[50];
+    int ciclos;
+} JogadorRecorde;
 // Tipos de item que um no pode conceder ao ser alcancado
 typedef enum {
     ITEM_ARMA = 0,
@@ -105,6 +112,10 @@ void mostrar_status(Jogador *j);//Mostra a vida do jogador
 int  guardar_jogo(const Jogador *j);//Para não se perder o progresso quando se sai do jogo
 int  carregar_jogo(Jogador *j);
 void apagar_save();
+//
+void guardar_jogador(char *nome, int ciclos);
+void listar_jogadores();
+void recorde(char *nome, int ciclos);//Co nfirma se é recordista
 
 // Inventario (mochila) - so acessivel fora de combate
 void adicionar_pocao(Jogador *j, const char *nome, TipoItem tipo, int valor);// guarda uma pocao apanhada na mochila
