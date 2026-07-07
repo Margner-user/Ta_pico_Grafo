@@ -29,23 +29,23 @@ int main() {
         switch (opcao) {
             case 1:{
                	Jogador jogador;
-            	if (!carregar_jogo(&jogador)) {
+            	if (!carregar_jogo(&jogador)){
                	 	printf("\nNenhum jogo guardado encontrado.\n");
                 	printf("Inicia um Novo Jogo primeiro.\n");
                 	continue;
             	}
             	printf("\nA retomar o jogo...\n");
             	printf("No: %d | Vida: %d | Sanidade: %d | Ciclos: %d\n",jogador.no_atual, jogador.vida, jogador.sanidade, jogador.num_ciclos);
-				jogar(&g, &jogador);
-				
-				if(jogador.no_atual == 139){
-				    char nome[50];
-				    printf("Digite o seu nome bravo jogador seja imortalizado: ");
-				    scanf("%49s", nome);
-				    guardar_jogador(nome, jogador.num_ciclos);
-				    recorde(nome, jogador.num_ciclos);
-				}				apagar_save();
-				                break;
+				int resultado= jogar(&g, &jogador);
+				if (resultado == 0) {
+                    char nome[50];
+                    printf("Digite o seu nome, bravo jogador, para ser imortalizado: ");
+                    scanf("%49s", nome);
+                    guardar_jogador(nome, jogador.num_ciclos);
+                    recorde(nome, jogador.num_ciclos);
+                    apagar_save();
+                }
+				break;
 			}
             case 2: {
             	system("cls");
@@ -64,15 +64,15 @@ int main() {
                 j.no_atual = NO_INICIAL;
                 j.ultimo_checkpoint = NO_INICIAL;
                 j.num_ciclos = 0;
-                jogar(&g, &j);
-				if(j.no_atual == 139){
-				char nome[50];
-				printf("Digite o seu nome bravo jogador seja imortalizado: ");
-				scanf("%49s", nome);
-				guardar_jogador(nome, j.num_ciclos);
-				recorde(nome, j.num_ciclos);
-			}
-				apagar_save();
+				int resultado = jogar(&g, &j);
+                if (resultado == 0){
+                    char nome[50];
+                    printf("Digite o seu nome, bravo jogador, para ser imortalizado: ");
+                    scanf("%49s", nome);
+                    guardar_jogador(nome, j.num_ciclos);
+                    recorde(nome, j.num_ciclos);
+                    apagar_save();
+                }
                 break;
             }
             case 3:
