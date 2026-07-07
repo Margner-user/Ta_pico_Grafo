@@ -10,8 +10,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
- 
- 
+//Update recordes
+#define RECORDE_H
+#define FICHEIRO_RECORDE "recordes.bin"
+#define RECORDE_INFINITO 999999
+//Struct tabela de recordes
+typedef struct {
+    char nome[50];
+    int ciclos;
+} JogadorRecorde;
 // Tipos de item que um no pode conceder ao ser alcancado
 typedef enum {
     ITEM_ARMA = 0,
@@ -57,7 +64,7 @@ typedef struct {
     Inimigo inimigo;	// Dados do inimigo, valido so se tem inimigo
     int e_checkpoint;  //  grava checkpoint ao entrar 
     int e_flashback;   //cena de memoria 
-    int da_item; // 1 se o no d� smth at all
+    int da_item; // 1 se o no d  smth at all
     TipoItem tipo_item;
     char item_nome[64];
     int item_valor;
@@ -109,7 +116,10 @@ void apagar_save();
 void sleep_ms(int ms);
 void limpaBuffer();
 
-
+// Recordes
+void guardar_jogador(char *nome, int ciclos);
+void listar_jogadores();
+void recorde(char *nome, int ciclos);
 // Inventario (mochila) - so acessivel fora de combate
 void adicionar_pocao(Jogador *j, const char *nome, TipoItem tipo, int valor);// guarda uma pocao apanhada na mochila
 int  usar_pocao(Jogador *j, int indice);// bebe a pocao no indice (0-based), aplica o efeito e remove da mochila

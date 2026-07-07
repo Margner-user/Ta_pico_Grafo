@@ -36,10 +36,16 @@ int main() {
             	}
             	printf("\nA retomar o jogo...\n");
             	printf("No: %d | Vida: %d | Sanidade: %d | Ciclos: %d\n",jogador.no_atual, jogador.vida, jogador.sanidade, jogador.num_ciclos);
-
-            	jogar(&g, &jogador);
-				apagar_save();
-                break;
+				jogar(&g, &jogador);
+				
+				if(jogador.no_atual == 139){
+				    char nome[50];
+				    printf("Digite o seu nome bravo jogador seja imortalizado: ");
+				    scanf("%49s", nome);
+				    guardar_jogador(nome, jogador.num_ciclos);
+				    recorde(jogador.num_ciclos);
+				}				apagar_save();
+				                break;
 			}
             case 2: {
             	system("cls");
@@ -59,11 +65,24 @@ int main() {
                 j.ultimo_checkpoint = NO_INICIAL;
                 j.num_ciclos = 0;
                 jogar(&g, &j);
+				if(j.no_atual == 139){
+				char nome[50];
+				printf("Digite o seu nome bravo jogador seja imortalizado: ");
+				scanf("%49s", nome);
+				guardar_jogador(nome, j.num_ciclos);
+				recorde(nome, j.num_ciclos);
+			}
+				apagar_save();
                 break;
             }
             case 3:
                 // TODO: Maior Pontuacao
-                printf("\n[Maior Pontuacao - ainda por fazer]\n");
+                printf("\n===============================================================\n");
+				printf("                     PONTUACAO\n");
+				printf("===============================================================\n");
+				listar_jogadores();
+				printf("===============================================================\n");
+
                 break;
             case 4:
             	system("cls");
