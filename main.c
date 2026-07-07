@@ -23,10 +23,20 @@ int main() {
         } while (opcao < 1 || opcao > 4);
 
         switch (opcao) {
-            case 1:
-                // TODO: Resumir Historia
-                printf("\n[Resumir Historia - ainda por fazer]\n");
+            case 1:{
+               	Jogador jogador;
+            	if (!carregar_jogo(&jogador)) {
+               	 	printf("\nNenhum jogo guardado encontrado.\n");
+                	printf("Inicia um Novo Jogo primeiro.\n");
+                	continue;
+            	}
+            	printf("\nA retomar o jogo...\n");
+            	printf("No: %d | Vida: %d | Sanidade: %d | Ciclos: %d\n",jogador.no_atual, jogador.vida, jogador.sanidade, jogador.num_ciclos);
+
+            	jogar(&grafo, &jogador);
+				apagar_save();
                 break;
+			}
             case 2: {
             	system("cls");
                 if (!carregar_historia(ARQUIVO_HISTORIA, &g)) {
