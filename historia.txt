@@ -1,7 +1,7 @@
 # ============================================================
 # historia.txt - O Ciclo de Oiner
 # ============================================================
-# FORMATO: 
+# FORMATO:
 #   ID:<numero>
 #   TEXTO:<texto da cena>
 #   CHECKPOINT:1                     (opcional - grava ponto de respawn)
@@ -100,7 +100,7 @@ FIM
 
 ID:9
 CHECKPOINT:1
-TEXTO:Oiner enche-se de coragem e comeca a desbravar a floresta. Esta desarmado e com frio. Chega a um cruzamento: a frente ve uma luz fraca entre as arvores, a esquerda ouve agua a correr, e a direita nao se ouve nem se ve nada - um silencio que parece propositado.
+TEXTO:Oiner enche-se de coragem e comeca a desbravar a floresta. Esta com frio e cheio de medo. Chega a um cruzamento: a frente ve uma luz fraca entre as arvores, a esquerda ouve agua a correr, e a direita nao se ouve nem se ve nada - um silencio que parece propositado.
 OPCAO:1|Seguir a luz em frente|12|13
 OPCAO:2|Virar a direita, para o silencio|10|14
 OPCAO:3|Virar a esquerda, seguindo a agua|9|15
@@ -140,14 +140,14 @@ FIM
 
 ID:14
 TEXTO:Oiner vira a direita, entrando num silencio absoluto e perturbador. De repente, um animal disforme - parte lobo, parte algo que nao deveria existir - salta das sombras, rosnando.
-INIMIGO:Criatura Disforme|18|3|2
+INIMIGO:Criatura Disforme|22|5|9
 OPCAO:1|Enfrentar a criatura|0|19
 OPCAO:2|Tentar fugir de volta ao cruzamento|14|9
 FIM
 
 ID:15
-TEXTO:Oiner vira a esquerda, seguindo o som de agua a correr. Encontra um riacho estreito que atravessa a floresta. Do outro lado, avista uma trilha que parece levar mais fundo na mata.
-OPCAO:1|Atravessar o riacho|10|35
+TEXTO:Oiner vira a esquerda, seguindo o som de agua a correr. Encontra um riacho estreito que atravessa a floresta. A agua e escura e parada de mais para um riacho - algo a perturba por baixo. Do outro lado, avista uma trilha que parece levar mais fundo na mata.
+OPCAO:1|Atravessar o riacho com cuidado|10|220
 OPCAO:2|Seguir a margem sem atravessar|8|16
 FIM
 
@@ -214,7 +214,7 @@ FIM
 
 ID:26
 TEXTO:Oiner chega a uma clareira onde a luz da lua parece mais fria do que deveria. No centro, uma arvore morta ergue-se sozinha, os galhos retorcidos como dedos. Um corvo negro de tamanho impossivel pousa no galho mais alto e fixa-o com olhos vermelhos.
-INIMIGO:Corvo das Cinzas|14|4|1
+INIMIGO:Corvo das Cinzas|18|4|8
 OPCAO:1|Atacar o corvo antes que ele ataque|0|28
 OPCAO:2|Afastar-se devagar|10|15
 FIM
@@ -268,7 +268,7 @@ FIM
 
 ID:36
 TEXTO:A trilha leva a um pequeno cemiterio esquecido, lapides inclinadas e cobertas de musgo. Um dos nomes gravados faz Oiner parar: e dificil de ler, mas as primeiras letras parecem formar "William". Uma sombra move-se entre as lapides.
-INIMIGO:Sombra Errante|16|3|3
+INIMIGO:Sombra Errante|20|5|9
 OPCAO:1|Investigar a lapide, ignorando o perigo|0|46
 OPCAO:2|Afastar-se rapidamente|11|37
 FIM
@@ -291,15 +291,21 @@ FIM
 
 ID:40
 ITEM:POCAO_VIDA|Ervas Secas do Acampamento|20
-TEXTO:A ponte range a cada passo, mas aguenta. Do outro lado, Oiner encontra um pequeno acampamento abandonado - uma fogueira ha muito apagada, e os restos de quem por ali passou antes dele. Uma manta dobrada. Um prato. Uma vida interrompida.
+TEXTO:A ponte range a cada passo, mas aguenta. Do outro lado, Oiner encontra um pequeno acampamento abandonado - uma fogueira ha muito apagada, e os restos de quem por ali passou antes dele. Uma manta dobrada. Um prato. Mais Uma vida interrompida.
 OPCAO:1|Procurar no acampamento|1|42
 FIM
 
 ID:41
-TEXTO:Descer pela ravina e mais lento, mas mais seguro. No fundo, Oiner encontra agua parada e o esqueleto de um animal grande - algo que parece nem pertencer a este mundo. Os ossos sao grandes de mais, e as garras ainda estao presas na lama.
-INIMIGO:Predador da Ravina|20|4|3
-OPCAO:1|Atacar antes que o predador desperte|0|43
-OPCAO:2|Tentar passar em silencio|12|42
+TEXTO:Descer pela ravina e mais lento, mas mais seguro - ou assim parecia. No fundo, uma agua lodosa e espessa cobre metade do espaco. E do lodo que emerge: um crocodilo do tamanho de uma carroça, mas com tres pares de patas e dois rabos que se movem independentemente. Um olho humano, demasiado inteligente, fixa Oiner.
+INIMIGO:Crocodilo Mutado|40|7|11
+OPCAO:1|Atacar enquanto ainda esta a emergir|0|224
+OPCAO:2|Escalar de volta pela ravina|15|39
+FIM
+
+ID:224
+TEXTO:O Crocodilo Mutado afunda-se no lodo com um barulho surdo, os rabos ainda a bater mesmo debaixo da superficie. O olho humano fecha-se devagar, como se reconhecesse que perdeu desta vez. No lodo perturbado, algo brilha - uma faca de osso entalhado, perdida de quem sabe que outro viajante infeliz.
+ITEM:ARMA|Faca de Osso|4
+OPCAO:1|Pegar na faca e subir a ravina|1|43
 FIM
 
 ID:42
@@ -318,9 +324,22 @@ OPCAO:1|Sair da clareira, abalado|1|45
 FIM
 
 ID:45
-TEXTO:Oiner sai da clareira ainda a tremer com o que viu. As memorias estao a tornar-se mais nitidas, mais frequentes - como se a propria floresta estivesse a ajuda-lo a lembrar o que ele passou a vida inteira a esquecer. A trilha continua em direcao a vila.
-OPCAO:1|Seguir em direcao a vila|9|61
-OPCAO:2|Voltar ao cruzamento principal da floresta|8|9
+TEXTO:Oiner sai da clareira ainda a tremer com o que viu. A trilha continua - mas algo bloqueia o caminho a frente. Uma arvore que nao estava la antes. Alta de mais. Com raizes que se mexem.
+OPCAO:1|Enfrentar o que bloqueia o caminho|8|222
+OPCAO:2|Desviar pela mata fechada|11|61
+FIM
+
+ID:222
+TEXTO:Nao e uma arvore. E uma criatura que cresceu em torno de uma arvore durante seculos ate os dois se tornarem a mesma coisa. O tronco pulsa. Os galhos dobram-se em direcao a Oiner com uma lentidao que e mais assustadora do que qualquer velocidade. Os olhos - se e que sao olhos - brilham como resina a arder nas fendas da casca.
+INIMIGO:Arvore Primordial|45|5|11
+OPCAO:1|Atacar o tronco|0|223
+OPCAO:2|Tentar fugir pela mata|14|61
+FIM
+
+ID:223
+TEXTO:A Arvore Primordial range e dobra, os galhos a partirem-se um por um, ate que o tronco central racha com um som que ressoa por toda a floresta como um grito muito antigo. Da abertura no tronco, resina dourada escorre lentamente para o chao - e dentro dela, preservado durante dezenas de anos, um pequeno frasco ainda intacto.
+ITEM:POCAO_SANIDADE|Resina Dourada da Arvore|35
+OPCAO:1|Pegar no frasco e continuar para a vila|1|61
 FIM
 
 ID:46
@@ -454,9 +473,65 @@ FIM
 # ---------- RUAS DA VILA / MEMORIA M6 (80-87) ----------
 
 ID:80
-TEXTO:Oiner perde-se pelas ruas estreitas e tortas da vila, passando por janelas fechadas e portas que parecem nunca se abrir. Ao virar uma esquina, encontra uma pequena capela em ruinas, esquecida ha anos.
+TEXTO:Oiner perde-se pelas ruas estreitas e tortas da vila, passando por janelas fechadas e portas que parecem nunca se abrir. Ao virar uma esquina, encontra uma pequena capela em ruinas, esquecida ha anos. Mais ao fundo, no limite da vila onde as casas acabam e a floresta comeca, ha uma construcao diferente de todas as outras - as paredes parecem inclinar-se para a frente, como se a casa estivesse a olhar para quem se aproxima.
 OPCAO:1|Entrar na capela em ruinas|10|81
 OPCAO:2|Continuar a explorar as ruas|8|84
+OPCAO:3|Aproximar-se da casa estranha no limite da vila|9|225
+FIM
+
+ID:225
+TEXTO:A casa nao tem fundacoes normais. Tem pernas. Pernas de galinha, grossas e escamosas, que se dobram e esticam lentamente enquanto Oiner se aproxima, como se a propria casa estivesse a respirar. A porta abre-se sozinha. De dentro vem uma voz que soa como madeira velha a ranger: "Entra, entra. Ja te estava a esperar ha varios ciclos."
+OPCAO:1|Entrar na casa|8|226
+OPCAO:2|Recuar rapidamente|11|80
+FIM
+
+ID:226
+TEXTO:O interior da casa e maior do que o exterior sugere. Sentada junto a um caldeiro que ferve sem fogo, uma figura curvada, de cabelos brancos ate ao chao e nariz que quase toca o queixo. Os olhos sao amarelos e muito acordados. "Senta-te," diz ela. Nao e um convite.
+OPCAO:1|Sentar-se e ouvir o que ela tem a dizer|7|227
+OPCAO:2|Perguntar quem ela e|9|228
+OPCAO:3|Tentar sair|13|229
+FIM
+
+ID:227
+TEXTO:"Sabes o que e interessante em ti?" diz a velha, mexendo o caldeiro sem olhar para ele. "Que ja morreste aqui dentro e ainda assim voltas. A maioria aprende. Tu nao aprendes - ou talvez aprendas mais devagar do que os outros." Ela para de mexer. "Isso ou e estupidez. Ou coragem. Nunca consegui distinguir as duas."
+OPCAO:1|Perguntar se ela pode ajudar a quebrar o ciclo|12|230
+OPCAO:2|Perguntar o que esta no caldeiro|8|231
+FIM
+
+ID:228
+TEXTO:"Baba," diz ela simplesmente. Uma pausa. "Aqui chamam-me de outras coisas, mas Baba serve." Os olhos amarelos fixam Oiner com uma intensidade desconfortavel. "A pergunta certa nao e quem sou eu. E o que queres de mim - e se tens algo que valha o preco."
+OPCAO:1|Perguntar o que ela quer em troca|9|231
+OPCAO:2|Dizer que nao queres nada dela|10|229
+FIM
+
+ID:229
+TEXTO:A porta nao abre. As paredes inclinam-se ligeiramente para dentro. "Ninguem sai da minha casa sem pagar o preco da visita," diz Baba, sem se virar. "Mas posso cobrar em sangue ou em sabedoria. Tu decides."
+INIMIGO:Baba Yaga, a Casa Viva|35|7|12
+OPCAO:1|Lutar para sair|0|232
+OPCAO:2|Aceitar pagar em sabedoria|8|230
+FIM
+
+ID:230
+TEXTO:Baba mergulha uma colher no caldeiro e retira um liquido espesso, escuro, que cheira a terra molhada e a algo muito antigo. "Bebe. Nao vai matar-te - ja tentei isso com outros e e uma perda de tempo." Os olhos amarelos brilham. "Vai mostrar-te o que precisas de ver, nao o que queres ver. Ha uma diferenca."
+OPCAO:1|Beber o liquido|9|233
+OPCAO:2|Recusar|11|229
+FIM
+
+ID:231
+TEXTO:"O que tenho no caldeiro?" Baba ri, um som como folhas secas a partir. "Memoria. A de outros que passaram por aqui. A tua propria, inclusivamente - deixaste aqui um pedaco da ultima vez que vieste, so que nao te lembras." Ela inclina a cabeca. "Queres recupera-la? Tem um preco."
+OPCAO:1|Perguntar qual o preco|8|230
+OPCAO:2|Recusar e tentar sair|11|229
+FIM
+
+ID:232
+TEXTO:A casa range e dobra-se, as paredes a contraírem-se como musculos. Baba nao se mexe da cadeira - e a propria casa que luta, as vigas a atacarem como bracos. Quando Oiner finalmente parte a porta a pontape e sai, ouve a voz atras de si: "Interessante. Muito interessante."
+OPCAO:1|Sair sem olhar para tras|1|80
+FIM
+
+ID:233
+TEXTO:[MEMORIA M10] O liquido e amargo e quente e frio ao mesmo tempo. A visao chega sem aviso: o pai de Oiner, muito mais novo, sentado nesta mesma casa, em frente a esta mesma Baba. "Quero poder que nenhum homem teve antes," diz o pai. Baba responde: "Todos os que vieram pedir poder foram embora com algo que nao pediram." O pai assina qualquer coisa com sangue. Baba dobra o papel. Oiner regressa a si com o gosto de terra na boca e uma certeza: o pai esteve aqui antes de fazer o que fez.
+ITEM:POCAO_SANIDADE|Brasa do Caldeiro de Baba|40
+OPCAO:1|Agradecer e sair da casa|1|80
 FIM
 
 ID:81
@@ -492,9 +567,10 @@ OPCAO:1|Afastar-se, pensativo|1|61
 FIM
 
 ID:87
-TEXTO:Oiner sente que ja explorou o suficiente da vila por agora. As ruas e os rostos comecam a repetir-se, e algo dentro dele diz que e hora de seguir em frente - para a floresta, ou para mais perto da verdade.
-OPCAO:1|Voltar ao cruzamento principal da floresta|9|9
-OPCAO:2|Seguir diretamente para o coracao da floresta|11|140
+TEXTO:Oiner sente que ja explorou o suficiente da vila por agora. As ruas e os rostos comecam a repetir-se, e algo dentro dele diz que e hora de seguir em frente. Ha tres saidas da vila: o caminho principal para a floresta, a estrada velha que contorna a mata pelo norte - raramente usada - e o caminho directo para o coracao da floresta.
+OPCAO:1|Seguir pelo caminho principal da floresta|9|9
+OPCAO:2|Tomar a estrada velha pelo norte|7|200
+OPCAO:3|Seguir diretamente para o coracao da floresta|11|140
 FIM
 
 # ============================================================
@@ -599,7 +675,7 @@ FIM
 
 ID:117
 TEXTO:O caminho estreita-se entre raizes grossas como pernas de gigantes adormecidos. O silencio aqui e diferente do resto da floresta - nao e vazio, e expectante, como se a propria mata soubesse o que esta prestes a acontecer.
-INIMIGO:Guardiao das Raizes|22|4|3
+INIMIGO:Guardiao das Raizes|32|6|11
 OPCAO:1|Enfrentar o que bloqueia o caminho|0|118
 OPCAO:2|Tentar desviar-se pela mata densa|14|119
 FIM
@@ -656,7 +732,7 @@ FIM
 
 ID:126
 TEXTO:Oiner ergue a Lamina de Cinzas - ou, se a nao tiver, apenas os punhos cerrados - e avanca. Doc sorri, um sorriso que comeca a rachar como vidro fino. "Entao seja. Vamos ver se aguentas a verdade."
-INIMIGO:Doc, a Mascara|24|5|3
+INIMIGO:Doc, a Mascara|30|6|12
 OPCAO:1|Atacar|0|127
 FIM
 
@@ -669,7 +745,7 @@ FIM
 
 ID:128
 TEXTO:"Vais ver coisas que ninguem mais consegue ver," diz o William jovem, repetindo palavras de tantos anos atras, mas agora com um brilho febril nos olhos. "Eu dei-te um dom, e tu queres destrui-lo?" Ele ergue as maos, energia instavel a crepitar a sua volta.
-INIMIGO:William, a Ambicao|28|5|4
+INIMIGO:William, a Ambicao|36|7|13
 OPCAO:1|Atacar|0|129
 FIM
 
@@ -698,7 +774,7 @@ FIM
 
 ID:133
 TEXTO:William nao se defende. Fecha os olhos, e espera. "Estou pronto," diz ele, num sussurro. "Ha muito que deveria ter feito isto."
-INIMIGO:William, o Arrependimento|15|2|1
+INIMIGO:William, o Arrependimento|20|3|10
 OPCAO:1|Desferir o golpe final|0|134
 OPCAO:2|Hesitar e baixar a arma|9|135
 FIM
@@ -753,3 +829,104 @@ CHECKPOINT:1
 TEXTO:A floresta muda a sua volta. As arvores ficam mais altas, mais antigas, e a luz que as atravessa parece vir de lugar nenhum. Oiner sente que cada passo o leva mais fundo nao so na mata, mas em algo que sempre esteve dentro de si. Nao ha caminho de volta daqui - so em frente.
 OPCAO:1|Continuar em frente|1|117
 FIM
+
+# ============================================================
+# IDs 200-215 - O GUERREIRO DA ESTRADA VELHA
+# Encontro na saida norte da vila, antes da floresta.
+# Kael - guerreiro misterioso que treina Oiner e lhe da a espada.
+# ============================================================
+
+ID:200
+TEXTO:A estrada velha e pouco mais do que um trilho de terra batida, ladeado por pedras cobertas de musgo e arvores baixas retorcidas pelo vento. A meio do caminho, sentado sobre uma pedra grande, esta um homem. Velho, mas nao fraco - as costas direitas, uma espada longa atravessada nos joelhos, os olhos fechados como se dormisse ou rezasse. Quando Oiner se aproxima, os olhos abrem-se devagar. "Sabia que virias por aqui."
+OPCAO:1|Perguntar quem ele e|8|201
+OPCAO:2|Perguntar como sabia que Oiner viria|10|202
+OPCAO:3|Ignorar e continuar pela estrada|12|209
+FIM
+
+ID:201
+TEXTO:"Kael," diz ele, com a economia de palavras de quem nao precisa de se explicar. "Fui guerreiro durante mais anos do que me apetece contar. Agora sento-me nesta pedra e observo quem passa." Ele inclina a cabeca, estudando Oiner. "E tu passas com demasiada frequencia para ser apenas um viajante."
+OPCAO:1|Admitir que nao percebe o que se passa|8|203
+OPCAO:2|Perguntar se ele conhecia o pai de Oiner|11|204
+FIM
+
+ID:202
+TEXTO:Kael sorri, um gesto pequeno e controlado. "Porque esta estrada leva sempre ao mesmo sitio, para quem carrega o que tu carregas." Ele toca de leve no cabo da espada. "Nao e a primeira vez que te vejo aqui, rapaz. So a primeira vez que decides parar."
+OPCAO:1|Perguntar o que quer dizer com isso|9|203
+OPCAO:2|Perguntar se ele conhecia o pai de Oiner|11|204
+FIM
+
+ID:203
+TEXTO:Kael observa Oiner durante um longo momento, como se pesasse algo. "Estas desarmado, confuso, e a caminhar para uma floresta que ja te matou mais vezes do que sabes." Ele levanta-se devagar, os ossos a ranger com a idade. "Posso ensinar-te o suficiente para sobreviveres um pouco mais. Se quiseres."
+OPCAO:1|Aceitar o treino|8|205
+OPCAO:2|Recusar - nao ha tempo|10|209
+FIM
+
+ID:204
+TEXTO:Kael para. Uma pausa curta, mas carregada. "William." Nao e uma pergunta. Ele olha para a estrada a frente, a voz mais baixa agora. "Conheci-o ha muitos anos. Antes de ele se perder nos proprios livros." Uma pausa mais longa. "Era um homem brilhante. E um homem fraco. As duas coisas ao mesmo tempo, o que e a combinacao mais perigosa que existe."
+OPCAO:1|Perguntar o que ele sabe sobre o que o pai fez|12|207
+OPCAO:2|Pedir que ele ensine Oiner a lutar|9|205
+FIM
+
+ID:205
+TEXTO:Kael afasta-se da pedra e escolhe um espaco aberto entre as arvores. "Primeiro: uma espada nao e uma ferramenta de matar. E uma extensao da intencao." Ele faz um gesto simples com a mao. "Pega numa pedra. Qualquer pedra. Vamos comecar pelo principio."
+OPCAO:1|Seguir as instrucoes com atencao|9|206
+OPCAO:2|Dizer que ja sabe lutar|13|208
+FIM
+
+ID:206
+TEXTO:O treino dura o tempo que dura - Kael nao usa relogios. Ele corrige a postura de Oiner, a forma como segura o peso, como distribui os pes. Nao fala muito. Quando fala, cada palavra pousa com precisao. No final, Kael recua um passo e avalia o resultado. "Nao e mau. Para alguem que comecou do zero." Ele desembainba a espada e estende-a a Oiner cabo em frente.
+ITEM:ARMA|Espada de Kael|8
+OPCAO:1|Aceitar a espada com cuidado|1|210
+FIM
+
+ID:207
+TEXTO:Kael escolhe as palavras com cuidado de quem as pensou muitas vezes antes de as dizer. "Sei que ele encontrou algo que nao devia ter encontrado. E que pagou um preco alto por isso - primeiro os outros, depois ele proprio." Ele olha directamente para Oiner. "O que nao sei e o que fizeste tu para merecer carregar o peso dele."
+OPCAO:1|Dizer que tambem nao sabes|9|205
+OPCAO:2|Perguntar se ha forma de quebrar o ciclo|12|211
+FIM
+
+ID:208
+TEXTO:Kael nao discute. Simplesmente recua um passo. "Entao mostra-me." O que se segue e rapido e nao corre bem para Oiner - Kael e mais rapido do que a idade sugere, e para antes de causar dano real. "Sabes lutar," diz ele, com calma. "Mas nao sabes sobreviver. Ha uma diferenca."
+INIMIGO:Kael, Duelo de Treino|15|4|14
+OPCAO:1|Aceitar o duelo|0|206
+OPCAO:2|Recuar e pedir que ele ensine|8|205
+FIM
+
+ID:209
+TEXTO:Oiner continua pela estrada sem parar. Kael observa-o partir sem dizer nada, apenas com aquele olhar de quem ja viu este momento antes e sabe como vai terminar. A estrada velha junta-se ao caminho principal mais a frente, junto ao cruzamento da floresta.
+OPCAO:1|Seguir para o cruzamento da floresta|1|9
+FIM
+
+ID:210
+TEXTO:A espada e mais pesada do que parece, e ao mesmo tempo mais equilibrada do que qualquer coisa que Oiner ja segurou. Kael fecha os dedos de Oiner a volta do cabo com firmeza. "Nao e uma oferta. E um emprestimo." Os olhos dele dizem outra coisa. "Se chegares ao fim do que procuras, nao vais precisar dela. E se nao chegares..." Ele encolhe os ombros com a serenidade de quem ja fez as pazes com todas as possibilidades.
+OPCAO:1|Agradecer e seguir para a floresta|1|212
+FIM
+
+ID:211
+TEXTO:Kael olha para Oiner durante um longo silencio. "Ha sempre forma de quebrar o que foi feito com intencao," diz ele finalmente. "Mas o caminho nao e externo. Nao esta na floresta, nem na cabana, nem em nenhum lugar que possas andar." Ele aponta para o peito de Oiner. "Esta aqui. E so tu sabes o que precisas de aceitar para chegar la." Pausa. "Deixa-me pelo menos dar-te uma hipotese de chegar la inteiro."
+OPCAO:1|Aceitar o treino|1|205
+FIM
+
+ID:212
+TEXTO:Kael volta para a pedra e fecha os olhos outra vez, como se a conversa nunca tivesse acontecido. Mas quando Oiner ja se afasta o suficiente, ouve uma ultima frase dita em voz baixa: "O teu pai nunca teve coragem de pedir ajuda. Espero que tu sejas diferente."
+OPCAO:1|Continuar para o cruzamento da floresta|1|213
+FIM
+
+ID:213
+TEXTO:[MEMORIA M9] As palavras de Kael ficam suspensas no ar enquanto Oiner caminha. E de repente, sem aviso, uma memoria que nunca tinha conseguido aceder: o pai, sentado a mesa da cozinha, com Oiner ao colo, ainda muito pequeno. "Quando ficares perdido," diz o pai, apontando para o peito de Oiner, "procura aqui primeiro. O sitio certo para comecar e sempre dentro de nos." Oiner tinha seis anos. Nunca tinha percebido o que o pai queria dizer. Agora, pela primeira vez, percebe.
+OPCAO:1|Seguir para o cruzamento com algo diferente dentro de ti|1|9
+FIM
+
+ID:220
+TEXTO:A meio da travessia, a agua explode. Uma cobra enorme emerge - duas cabecas, cada uma a olhar para um lado diferente de Oiner, as linguas a vibrar em sincronia. As duas cabecas nao concordam: uma ataca pela esquerda enquanto a outra finge recuar pela direita.
+INIMIGO:Cobra de Duas Cabecas|30|6|10
+OPCAO:1|Enfrentar a cobra|0|221
+OPCAO:2|Tentar recuar para a margem|13|15
+FIM
+
+ID:221
+TEXTO:Com um golpe certeiro na juncao entre as duas cabecas - o unico ponto fraco que nao serve nenhuma das duas - a cobra afunda-se de volta para as profundezas escuras do riacho. O silencio volta. A agua volta a estar parada. Oiner atravessa o resto do riacho sem respirar.
+ITEM:POCAO_VIDA|Escama da Cobra|15
+OPCAO:1|Continuar para a trilha do outro lado|1|35
+FIM
+
