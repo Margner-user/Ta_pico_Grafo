@@ -494,13 +494,13 @@ void reiniciar_ciclo(Jogador *j){
     j->num_ciclos++;
 }
 
-void jogar(Grafo *g, Jogador *j) {
+int jogar(Grafo *g, Jogador *j) {
 	srand((unsigned int)time(NULL));   // seed da aleatoriedade, uma vez por partida
     while (1) {
         No *no = obter_no(g, j->no_atual);
         if (no == NULL) {
             printf("\n[ERRO] No %d nao encontrado. A terminar.\n", j->no_atual);
-            return;
+            return 2;
         }
         if (no->e_checkpoint)
             j->ultimo_checkpoint = no->id;
@@ -556,7 +556,7 @@ void jogar(Grafo *g, Jogador *j) {
         // fim da historia 
         if (no->num_opcoes == 0) {
             printf("\n[Fim da historia. Obrigado por jogar.]\n");
-            return;
+            return 0;
         }
      	int i;
         for (i = 0; i < no->num_opcoes; i++) {
@@ -575,7 +575,7 @@ void jogar(Grafo *g, Jogador *j) {
         if (res == EOF) {
             printf("\n[EOF. A sair.]\n");
             sleep_ms(2000);
-            return;
+            return 2;
         }
         if (res != 1) {
             int c;
@@ -591,7 +591,7 @@ void jogar(Grafo *g, Jogador *j) {
 		if (escolha == 10) {
             if (guardar_jogo(j))
                 printf("[Ate a proxima.]\n");
-            return;
+            return 1;
         }
         Aresta *escolhida = NULL;
         
