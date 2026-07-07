@@ -20,7 +20,7 @@ int main() {
                 opcao = -1; 
             }
             else if(opcao < 1 || opcao > 4){
-            	printf("Entrada inválida! Digite um número entre 1 e 4.\n");
+            	printf("Entrada invÃ¡lida! Digite um nÃºmero entre 1 e 4.\n");
             	limpaBuffer();
                 opcao = -1; 
 			}
@@ -43,7 +43,7 @@ int main() {
 				    printf("Digite o seu nome bravo jogador seja imortalizado: ");
 				    scanf("%49s", nome);
 				    guardar_jogador(nome, jogador.num_ciclos);
-				    recorde(jogador.num_ciclos);
+				    recorde(nome, jogador.num_ciclos);
 				}				apagar_save();
 				                break;
 			}
