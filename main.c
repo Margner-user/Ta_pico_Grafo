@@ -36,6 +36,11 @@ int main() {
                 Jogador j;
                 j.vida = 100;
                 j.sanidade = 100;
+                j.arma_equipada.bonus_ataque = 0;
+				strncpy(j.arma_equipada.nome, "Punhos", sizeof(j.arma_equipada.nome) - 1);
+				j.arma_equipada.nome[sizeof(j.arma_equipada.nome) - 1] = '\0';
+                j.num_armas = 0;
+                j.num_pocoes = 0;
                 j.no_atual = NO_INICIAL;
                 j.ultimo_checkpoint = NO_INICIAL;
                 j.num_ciclos = 0;
@@ -47,6 +52,7 @@ int main() {
                 printf("\n[Maior Pontuacao - ainda por fazer]\n");
                 break;
             case 4:
+            	system("cls");
                 printf("\nAte a proxima, Oiner...\n");
                 break;
         }

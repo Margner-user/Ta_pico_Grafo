@@ -12,9 +12,9 @@ void Menu() {
     printf("                 N A   F L O R E S T A\n");
     printf("===============================================================\n");
     printf("\n");
-    printf("                 1 - Resumir História\n");
+    printf("                 1 - Resumir Hist�ria\n");
     printf("                 2 - Novo Jogo\n");
-    printf("                 3 - Maior Pontuação\n");
+    printf("                 3 - Maior Pontua��o\n");
     printf("                 4 - Sair\n");
     printf("\n");
     printf("===============================================================\n");
@@ -44,6 +44,8 @@ No *garantir_no(Grafo *g, int id) {
     no->tem_inimigo = 0;
     no->e_checkpoint= 0;
     no->e_flashback = 0;
+    no->da_item = 0;
+    no->coletado = 0;
     g->total_nos++;
     return no;
 }//Novidade(03 de Julho)
@@ -71,7 +73,7 @@ static void esperar_enter(void) {
 }
 static void remover_quebra_linha(char *linha) {
 /*O fgets estava a me dar erro, 
-pesquisei e parece que isso acontece quando nÃƒÂ£o se remove o '\n' e '\r' do fim da linha */
+pesquisei e parece que isso acontece quando nÃ£o se remove o '\n' e '\r' do fim da linha */
     size_t len = strlen(linha);
     if (len > 0 && linha[len - 1] == '\n'){
       linha[len - 1] = '\0';
@@ -82,7 +84,7 @@ pesquisei e parece que isso acontece quando nÃƒÂ£o se remove o '\n' e '\r' d
 }
 
 //----------------Parser---------------------------
- //Btw  garantir_no ainda nao existe mas vai basicamente criar o nÃƒÂ³
+ //Btw  garantir_no ainda nao existe mas vai basicamente criar o nÃ³
 int carregar_historia(const char *caminho, Grafo *g) {
     FILE *f = fopen(caminho, "r");
     if (f == NULL) {
@@ -101,7 +103,7 @@ int carregar_historia(const char *caminho, Grafo *g) {
 
         if (strncmp(linha, "ID:", 3) == 0) {
             no_atual = garantir_no(g, atoi(linha + 3));
-        //Btw ainda nÃƒÂ£o existe mas "garantir nÃƒÂ³" vai basicamente criar o nÃƒÂ³
+        //Btw ainda nÃ£o existe mas "garantir nÃ³" vai basicamente criar o nÃ³
         }
         else if (strncmp(linha, "TEXTO:", 6) == 0) {
             if (no_atual != NULL) {
@@ -141,7 +143,7 @@ int carregar_historia(const char *caminho, Grafo *g) {
                 char campo[MAX_LINHA];
                 strncpy(campo, linha + 6, sizeof(campo) - 1);
                 campo[sizeof(campo) - 1] = '\0';
-                //Basicamente o tokenazer do java, vou separar o campo da opÃƒÂ§ÃƒÂ£o porque tem peso, destino e etc...
+                //Basicamente o tokenazer do java, vou separar o campo da opÃ§Ã£o porque tem peso, destino e etc...
                 char *numero_str= strtok(campo, "|");
                 char *texto_str = strtok(NULL,  "|");
                 char *peso_str = strtok(NULL,  "|");
@@ -158,6 +160,31 @@ int carregar_historia(const char *caminho, Grafo *g) {
                 }
             }
         }
+        else if (strncmp(linha, "ITEM:", 5) == 0) {
+		    if (no_atual != NULL) {
+		        char campo[MAX_LINHA];
+		        strncpy(campo, linha + 5, sizeof(campo) - 1);
+		        campo[sizeof(campo) - 1] = '\0';
+		
+		        char *tipo_str  = strtok(campo, "|");
+		        char *nome_str  = strtok(NULL, "|");
+		        char *valor_str = strtok(NULL, "|");
+		
+		        if (tipo_str && nome_str && valor_str) {
+		            if (strcmp(tipo_str, "ARMA") == 0)
+		                no_atual->tipo_item = ITEM_ARMA;
+		            else if (strcmp(tipo_str, "POCAO_VIDA") == 0)
+		                no_atual->tipo_item = ITEM_POCAO_VIDA;
+		            else if (strcmp(tipo_str, "POCAO_SANIDADE") == 0)
+		                no_atual->tipo_item = ITEM_POCAO_SANIDADE;
+		
+		            strncpy(no_atual->item_nome, nome_str, sizeof(no_atual->item_nome) - 1);
+		            no_atual->item_nome[sizeof(no_atual->item_nome) - 1] = '\0';
+		            no_atual->item_valor = atoi(valor_str);
+		            no_atual->da_item = 1;
+		        }
+		    }
+		}
         else if (strcmp(linha, "FIM") == 0) {
             no_atual = NULL;
         }
@@ -187,7 +214,6 @@ int rolar_ataque(int bonus_ataque, int defesa_alvo, int *dano_resultante) {
 }
 
 int combate(Jogador *j, Inimigo *inimigo){
-    const int JOGADOR_BONUS_ATAQUE = 4;
     const int JOGADOR_DEFESA = 12;
     int vida_inimigo = inimigo->vida;
 
@@ -200,7 +226,7 @@ int combate(Jogador *j, Inimigo *inimigo){
         printf("\n--- Turno %d ---\n", turno);
         /* turno do jogador */
         int dano;
-        if (rolar_ataque(JOGADOR_BONUS_ATAQUE, inimigo->defesa, &dano)) {
+        if (rolar_ataque(j->arma_equipada.bonus_ataque, inimigo->defesa, &dano)) {
             vida_inimigo -= dano;
             if (vida_inimigo < 0){
               vida_inimigo = 0;
@@ -234,9 +260,185 @@ int combate(Jogador *j, Inimigo *inimigo){
 void mostrar_status(Jogador *j) {
     printf("\n----------------------------------------\n");
     printf(" Vida: %d   |   Sanidade: %d", j->vida, j->sanidade);
+    printf("\n Arma: %s (bonus ataque +%d)\n", j->arma_equipada.nome, j->arma_equipada.bonus_ataque);
+    printf(" Mochila: %d arma(s) | %d pocao(oes)", j->num_armas, j->num_pocoes);
     if (j->num_ciclos > 0)
         printf("   |   Ciclos: %d", j->num_ciclos);
     printf("\n----------------------------------------\n");
+}
+
+// ---------------- Inventario (mochila) ----------------
+// Guarda uma pocao apanhada num no. Cada pocao mantem o seu proprio nome e
+// valor de cura, porque no historia.txt pocoes diferentes curam quantidades diferentes.
+void adicionar_pocao(Jogador *j, const char *nome, TipoItem tipo, int valor) {
+    if (j->num_pocoes >= MAX_POCOES) {
+        printf("[Mochila de pocoes cheia! Nao foi possivel guardar '%s']\n", nome);
+        return;
+    }
+    ItemPocao *p = &j->pocoes[j->num_pocoes];
+    strncpy(p->nome, nome, sizeof(p->nome) - 1);
+    p->nome[sizeof(p->nome) - 1] = '\0';
+    p->tipo = tipo;
+    p->valor = valor;
+    j->num_pocoes++;
+}
+
+// Bebe a pocao no indice (0-based): aplica a cura e remove-a da mochila.
+int usar_pocao(Jogador *j, int indice) {
+    if (indice < 0 || indice >= j->num_pocoes) {
+        printf("[Indice de pocao invalido]\n");
+        return 0;
+    }
+    ItemPocao p = j->pocoes[indice];
+    if (p.tipo == ITEM_POCAO_VIDA) {
+        j->vida += p.valor;
+        if (j->vida > 100) j->vida = 100;
+        printf("[Bebeste %s. (+%d vida)]\n", p.nome, p.valor);
+    } else if (p.tipo == ITEM_POCAO_SANIDADE) {
+        j->sanidade += p.valor;
+        if (j->sanidade > 100) j->sanidade = 100;
+        printf("[Bebeste %s. (+%d sanidade)]\n", p.nome, p.valor);
+    }
+    /* remove da lista, deslocando as seguintes uma posicao para tras */
+    int i;
+    for (i = indice; i < j->num_pocoes - 1; i++) {
+        j->pocoes[i] = j->pocoes[i + 1];
+    }
+    j->num_pocoes--;
+    return 1;
+}
+
+// Guarda uma arma apanhada na mochila, sem a equipar automaticamente.
+void adicionar_arma(Jogador *j, Arma arma) {
+    if (j->num_armas >= MAX_ARMAS_MOCHILA) {
+        printf("[Mochila de armas cheia! Nao foi possivel guardar '%s']\n", arma.nome);
+        return;
+    }
+    j->mochila_armas[j->num_armas] = arma;
+    j->num_armas++;
+}
+
+// Troca a arma equipada pela arma no indice (0-based) da mochila.
+// A arma que estava equipada antes fica no lugar dela na mochila.
+static int e_punhos(Arma *a) {
+    return strcmp(a->nome, "Punhos") == 0 && a->bonus_ataque == 0;
+}
+
+void equipar_arma(Jogador *j, int indice) {
+    if (indice < 0 || indice >= j->num_armas) {
+        printf("[Indice de arma invalido]\n");
+        return;
+    }
+    Arma nova = j->mochila_armas[indice];
+    Arma antiga = j->arma_equipada;
+
+    if (e_punhos(&antiga)) {
+        /* Punhos nao ocupam espaco na mochila: remove o slot em vez
+           de guardar os punhos la dentro */
+        int i;
+        for (i = indice; i < j->num_armas - 1; i++)
+            j->mochila_armas[i] = j->mochila_armas[i + 1];
+        j->num_armas--;
+    } else {
+        j->mochila_armas[indice] = antiga;
+    }
+
+    j->arma_equipada = nova;
+    system("cls");
+    printf("[Equipaste: %s (bonus ataque +%d)]\n", nova.nome, nova.bonus_ataque);
+    esperar_enter();
+}
+// Guarda a arma atual na mochila e volta a lutar com os punhos (bonus +0).
+void desequipar_arma(Jogador *j) {
+    Arma punhos;
+    strncpy(punhos.nome, "Punhos", sizeof(punhos.nome) - 1);
+    punhos.nome[sizeof(punhos.nome) - 1] = '\0';
+    punhos.bonus_ataque = 0;
+
+    if (strcmp(j->arma_equipada.nome, "Punhos") == 0 && j->arma_equipada.bonus_ataque == 0) {
+        printf("[Ja estas a lutar com os punhos.]\n");
+        return;
+    }
+    adicionar_arma(j, j->arma_equipada);
+    j->arma_equipada = punhos;
+    printf("[Desequipaste a tua arma. Voltaste a lutar com as maos.]\n");
+}
+
+// Menu da mochila. So deve ser chamado fora de combate.
+void abrir_inventario(Jogador *j) {
+    int opcao;
+    do {
+        printf("\n---------------- MOCHILA ----------------\n");
+        printf("Arma equipada: %s (bonus +%d)\n", j->arma_equipada.nome, j->arma_equipada.bonus_ataque);
+
+        printf("\nArmas na mochila:\n");
+        if (j->num_armas == 0) {
+            printf("  (vazio)\n");
+        } else {
+            int i;
+            for (i = 0; i < j->num_armas; i++)
+                printf("  %d - %s (bonus +%d)\n", i + 1, j->mochila_armas[i].nome, j->mochila_armas[i].bonus_ataque);
+        }
+
+        printf("\nPocoes:\n");
+        if (j->num_pocoes == 0) {
+            printf("  (vazio)\n");
+        } else {
+            int i;
+            for (i = 0; i < j->num_pocoes; i++) {
+                const char *tipo_str = (j->pocoes[i].tipo == ITEM_POCAO_VIDA) ? "vida" : "sanidade";
+                printf("  %d - %s (+%d %s)\n", i + 1, j->pocoes[i].nome, j->pocoes[i].valor, tipo_str);
+            }
+        }
+
+        printf("\n-------------------------------------------\n");
+        printf("1 - Equipar arma\n");
+        printf("2 - Desequipar arma\n");
+        printf("3 - Beber pocao\n");
+        printf("0 - Fechar mochila\n");
+        printf("Escolha: ");
+
+        if (scanf("%d", &opcao) != 1) {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Entrada invalida.\n");
+            opcao = -1;
+            continue;
+        }
+
+        if (opcao == 1) {
+            if (j->num_armas == 0) {
+                printf("Nao tens armas na mochila.\n");
+                continue;
+            }
+            printf("Qual arma queres equipar? ");
+            int idx;
+            if (scanf("%d", &idx) == 1)
+                equipar_arma(j, idx - 1);
+        } else if (opcao == 2) {
+            desequipar_arma(j);
+        } else if (opcao == 3) {
+		    if (j->num_pocoes == 0) {
+		    	system("cls");
+		        printf("\n[A tua mochila de pocoes esta vazia. Explora a floresta para encontrar mais.]\n");
+		        esperar_enter();
+		        continue;
+		    }
+		    printf("Qual pocao queres beber? ");
+		    int idx;
+		    if (scanf("%d", &idx) != 1) {
+		        int c;
+		        while ((c = getchar()) != '\n' && c != EOF) {}
+		        printf("Entrada invalida.\n");
+		        esperar_enter();
+		        continue;
+		    }
+		    usar_pocao(j, idx - 1);
+		    esperar_enter();
+        } else if (opcao != 0) {
+            printf("Opcao invalida.\n");
+        }
+    } while (opcao != 0);
 }
 
 int resolver_rolagem(No *no, Aresta *escolhida, int *penalizacao) {
@@ -290,18 +492,42 @@ void jogar(Grafo *g, Jogador *j) {
         if (no->e_checkpoint)
             j->ultimo_checkpoint = no->id;
         //Mostra o texto do no 
+        system("cls");
+        if (no->da_item && !no->coletado) {
+		    switch (no->tipo_item) {
+		        case ITEM_ARMA: {
+		            Arma nova;
+		            strncpy(nova.nome, no->item_nome, sizeof(nova.nome) - 1);
+		            nova.nome[sizeof(nova.nome) - 1] = '\0';
+		            nova.bonus_ataque = no->item_valor;
+		            adicionar_arma(j, nova);
+		            printf("\n[Encontraste uma arma: %s (bonus +%d). Guardada na mochila.]\n",
+		                   nova.nome, nova.bonus_ataque);
+		            break;
+		        }
+		        case ITEM_POCAO_VIDA:
+		        case ITEM_POCAO_SANIDADE:
+		            adicionar_pocao(j, no->item_nome, no->tipo_item, no->item_valor);
+		            printf("\n[Encontraste: %s. Guardada na mochila.]\n", no->item_nome);
+		            break;
+		    }
+		    no->coletado = 1;
+		}
         printf("\n========================================\n");
         if (no->e_flashback) {
             printf("       * * * FRAGMENTO DE MEMORIA * * *\n");
             printf("========================================\n");
             printf("%s\n", no->texto);
             printf("========================================\n");
-            mostrar_status(j);
             esperar_enter();
+            mostrar_status(j);
         } else {
             printf("%s\n", no->texto);
             printf("========================================\n");
             mostrar_status(j);
+                if (no->e_checkpoint || no->tem_inimigo) {
+        			esperar_enter();
+    			} 
         }
         if (j->vida <= 0 || j->sanidade <= 0) {
             if (j->sanidade <= 0)
@@ -324,6 +550,7 @@ void jogar(Grafo *g, Jogador *j) {
             else
                 printf("%d - %s (dificuldade %d)\n", a->numero, a->texto, a->peso);
         }
+        printf("0 - Abrir mochila\n");
         //le escolha do jogador 
         int escolha = -1;
         printf("\nEscolhe uma opcao: ");
@@ -337,6 +564,10 @@ void jogar(Grafo *g, Jogador *j) {
             while ((c = getchar()) != '\n' && c != EOF) {}
             printf("Entrada invalida.\n");
             continue;
+        }
+        if (escolha == 0) {
+            abrir_inventario(j);
+            continue; /* volta a mostrar o mesmo no e as mesmas opcoes */
         }
         Aresta *escolhida = NULL;
         
@@ -355,6 +586,7 @@ void jogar(Grafo *g, Jogador *j) {
         if (no->tem_inimigo && escolhida->peso == 0) {
             int venceu = combate(j, &no->inimigo);
             if (!venceu) continue;
+            esperar_enter();
             j->no_atual = escolhida->destino;
             continue;
         }
@@ -364,6 +596,7 @@ void jogar(Grafo *g, Jogador *j) {
             j->sanidade -= penalizacao;
             if (j->sanidade < 0) j->sanidade = 0;
         }
+        esperar_enter();
         //verifica se o destino e uma opcao de combate (peso 0) 
         int e_combate_forcado = 0;
         
@@ -379,6 +612,7 @@ void jogar(Grafo *g, Jogador *j) {
         if (e_combate_forcado) {
             int venceu = combate(j, &no->inimigo);
             if (!venceu) continue;
+            esperar_enter();
         }
         j->no_atual = destino;
     }
