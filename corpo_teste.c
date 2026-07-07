@@ -651,4 +651,60 @@ void apagar_save(void) {
     printf("Save apagado.\n");
 }
 
+//Recordistas update as 17:01
+void guardar_jogador(const char *nome, int ciclos) {
+    FILE *f = fopen(FICHEIRO_RECORDE, "ab"); //usa o append
+    if (!f) return;
+    JogadorRecorde jr;
+    strncpy(jr.nome, nome, sizeof(jr.nome)-1);
+    jr.nome[sizeof(jr.nome)-1] = '\0';
+    jr.ciclos = ciclos;
+    fwrite(&jr, sizeof(JogadorRecorde), 1, f);
+    fclose(f);
+}
+void listar_jogadores(void){
+    FILE *f = fopen(FICHEIRO_RECORDE, "rb");
+    if (!f){
+        printf("Nenhum jogador ainda.\n");
+        return;
+    }
+    JogadorRecorde jr;
+    JogadorRecorde recordista;
+    recordista.ciclos = RECORDE_INFINITO;
+    printf("\n--- Lista de jogadores ---\n");
+    while (fread(&jr, sizeof(JogadorRecorde), 1, f) == 1) {
+        printf("%s terminou em %d ciclos\n", jr.nome, jr.ciclos);
+        if (jr.ciclos < recordista.ciclos) {
+            recordista = jr;
+        }
+    }
+    fclose(f);
+    if (recordista.ciclos != RECORDE_INFINITO) {
+        printf("\n*** Recordista atual: %s com %d ciclos! ***\n",
+               recordista.nome, recordista.ciclos);
+    }
+}
+// Verificar se o jogador foi o melhor 
+void verificar_recordista(const char *nome, int ciclos) {
+    FILE *f = fopen(FICHEIRO_RECORDE, "rb");
+    if (!f) {
+        printf("\n*** Parabéns %s, és o primeiro a completar o jogo! ***\n", nome);
+        return;
+    }
+    JogadorRecorde jr;
+    JogadorRecorde recordista;
+    recordista.ciclos = RECORDE_INFINITO;
+    while (fread(&jr, sizeof(JogadorRecorde), 1, f) == 1) {
+        if (jr.ciclos < recordista.ciclos) {
+            recordista = jr;
+        }
+    }
+    fclose(f);
+    if (ciclos < recordista.ciclos) {
+        printf("\n*** Parabéns %s, conseguiste o MELHOR resultado com %d ciclos! ***\n", nome, ciclos);
+    } else {
+        printf("\nBoa tentativa, %s! Mas o recorde continua com %s (%d ciclos).\n",
+               nome, recordista.nome, recordista.ciclos);
+    }
+}
 
