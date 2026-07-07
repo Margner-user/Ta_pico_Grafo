@@ -551,6 +551,7 @@ void jogar(Grafo *g, Jogador *j) {
                 printf("%d - %s (dificuldade %d)\n", a->numero, a->texto, a->peso);
         }
         printf("0 - Abrir mochila\n");
+		printf("10 - Guardar e Sair\n");
         //le escolha do jogador 
         int escolha = -1;
         printf("\nEscolhe uma opcao: ");
@@ -568,6 +569,11 @@ void jogar(Grafo *g, Jogador *j) {
         if (escolha == 0) {
             abrir_inventario(j);
             continue; /* volta a mostrar o mesmo no e as mesmas opcoes */
+        }
+		if (escolha == 10) {
+            if (guardar_jogo(j))
+                printf("[Ate a proxima.]\n");
+            return;
         }
         Aresta *escolhida = NULL;
         
