@@ -712,7 +712,7 @@ void listar_jogadores(void){
     }
 }
 // Verificar se o jogador foi o melhor 
-void verificar_recordista(char *nome, int ciclos) {
+void recorde(char *nome, int ciclos) {
     FILE *f = fopen(FICHEIRO_RECORDE, "rb");
     if (!f) {
         printf("\n*** ParabÃ©ns %s, Ã©s o primeiro a completar o jogo! ***\n", nome);
