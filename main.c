@@ -54,7 +54,7 @@ int main() {
                     break;
                 }
                 Jogador j;
-                j.vida = 100;
+                j.vida = 65;
                 j.sanidade = 100;
                 j.arma_equipada.bonus_ataque = 0;
 				strncpy(j.arma_equipada.nome, "Punhos", sizeof(j.arma_equipada.nome) - 1);
