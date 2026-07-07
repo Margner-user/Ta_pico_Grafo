@@ -95,7 +95,7 @@ typedef struct {
 void Menu();
 
 //Carregar ficheiro e grafo
-void jogar(Grafo *g, Jogador *j);//Função principal
+int  jogar(Grafo *g, Jogador *j); // 0=fim normal, 1=guardou e saiu, 2=erro/EOF função principal
 void reiniciar_ciclo(Jogador *j);
 No  *obter_no(Grafo *g, int id);// Vai buscar o nó dentro do nosso grafo
 No  *garantir_no(Grafo *g, int id);//Garante que o nó existe se não existir vai criar
