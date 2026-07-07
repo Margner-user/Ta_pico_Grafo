@@ -8,7 +8,7 @@
 #   INIMIGO:<nome>|<vida>|<bonus>|<defesa>  (opcional)
 #   OPCAO:<n>|<texto>|<peso>|<destino>
 #   FIM
-#
+# 
 # MECANICA DE ROLAGEM:
 #   O jogador escolhe uma opcao. O dado d20 e rolado:
 #   - rolagem >= peso_escolhido -> sucesso, vai para o destino.
